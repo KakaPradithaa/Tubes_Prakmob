@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.BengkelAppClient" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item> <!-- Ganti dengan warna primer Anda -->
+        <item name="colorPrimaryVariant">@color/purple_700</item> <!-- Ganti dengan warna primer varian Anda -->
+        <item name="colorOnPrimary">@color/white</item> <!-- Warna teks di atas warna primer -->
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item> <!-- Ganti dengan warna sekunder Anda -->
+        <item name="colorSecondaryVariant">@color/teal_700</item> <!-- Ganti dengan warna sekunder varian Anda -->
+        <item name="colorOnSecondary">@color/black</item> <!-- Warna teks di atas warna sekunder -->
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
