@@ -10,8 +10,10 @@ data class User(
     val id: Int,
     val name: String,
     val email: String,
+    val phone: String,
+    val address: String,
     @SerializedName("email_verified_at")
-    val emailVerifiedAt: String?, // Bisa nullable
+    val emailVerifiedAt: String?,
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("updated_at")

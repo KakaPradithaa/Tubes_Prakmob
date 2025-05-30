@@ -1,11 +1,9 @@
-// di/DatabaseModule.kt
 package com.example.bengkelappclient.di
 
 import android.content.Context
 import androidx.room.Room
 import com.example.bengkelappclient.data.local.AppDatabase
-import com.example.bengkelappclient.data.local.dao.CustomerDao
-import com.example.bengkelappclient.data.local.dao.UserDao
+import com.example.bengkelappclient.data.local.dao.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,9 +27,22 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideCustomerDao(appDatabase: AppDatabase): CustomerDao {
-        return appDatabase.customerDao()
+    fun provideVehicleDao(appDatabase: AppDatabase): VehicleDao {
+        return appDatabase.vehicleDao()
     }
 
-    // TODO: Provide DAO untuk Vehicle dan ServiceOrder jika sudah dibuat
+    @Provides
+    fun provideServiceDao(appDatabase: AppDatabase): ServiceDao {
+        return appDatabase.serviceDao()
+    }
+
+    @Provides
+    fun provideBookingDao(appDatabase: AppDatabase): BookingDao {
+        return appDatabase.bookingDao()
+    }
+
+    @Provides
+    fun provideScheduleDao(appDatabase: AppDatabase): ScheduleDao {
+        return appDatabase.scheduleDao()
+    }
 }
