@@ -1,6 +1,6 @@
 package com.example.bengkelappclient.data.remote
 
-import com.example.bengkelappclient.data.model.* // Pastikan ini benar
+import com.example.bengkelappclient.data.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -19,27 +19,9 @@ interface ApiService {
     @POST("logout")
     suspend fun logoutUser(): Response<SimpleApiResponse>
 
-
-    // --- Customer Endpoints ---
-    @GET("customers")
-    suspend fun getAllCustomers(): Response<List<Customer>>
-
-    @POST("customers")
-    suspend fun createCustomer(@Body customer: Customer): Response<Customer>
-
-    @GET("customers/{id}")
-    suspend fun getCustomerById(@Path("id") customerId: Int): Response<Customer>
-
-    @PUT("customers/{id}")
-    suspend fun updateCustomer(@Path("id") customerId: Int, @Body customer: Customer): Response<Customer>
-
-    @DELETE("customers/{id}")
-    suspend fun deleteCustomer(@Path("id") customerId: Int): Response<Unit>
-
-
     // --- Vehicle Endpoints ---
     @GET("vehicles")
-    suspend fun getAllVehicles(@Query("customer_id") customerId: Int? = null): Response<List<Vehicle>>
+    suspend fun getAllVehicles(@Query("user_id") userId: Int? = null): Response<List<Vehicle>>
 
     @POST("vehicles")
     suspend fun createVehicle(@Body vehicle: Vehicle): Response<Vehicle>
@@ -53,23 +35,51 @@ interface ApiService {
     @DELETE("vehicles/{id}")
     suspend fun deleteVehicle(@Path("id") vehicleId: Int): Response<Unit>
 
+    // --- Service Endpoints ---
+    @GET("services")
+    suspend fun getAllServices(): Response<List<Service>>
 
-    // --- ServiceOrder Endpoints ---
-    @GET("service-orders")
-    suspend fun getAllServiceOrders(
-        @Query("vehicle_id") vehicleId: Int? = null,
-        @Query("status") status: String? = null
-    ): Response<List<ServiceOrder>>
+    @POST("services")
+    suspend fun createService(@Body service: Service): Response<Service>
 
-    @POST("service-orders")
-    suspend fun createServiceOrder(@Body serviceOrder: ServiceOrder): Response<ServiceOrder>
+    @GET("services/{id}")
+    suspend fun getServiceById(@Path("id") serviceId: Int): Response<Service>
 
-    @GET("service-orders/{id}")
-    suspend fun getServiceOrderById(@Path("id") serviceOrderId: Int): Response<ServiceOrder>
+    @PUT("services/{id}")
+    suspend fun updateService(@Path("id") serviceId: Int, @Body service: Service): Response<Service>
 
-    @PUT("service-orders/{id}")
-    suspend fun updateServiceOrder(@Path("id") serviceOrderId: Int, @Body serviceOrder: ServiceOrder): Response<ServiceOrder>
+    @DELETE("services/{id}")
+    suspend fun deleteService(@Path("id") serviceId: Int): Response<Unit>
 
-    @DELETE("service-orders/{id}")
-    suspend fun deleteServiceOrder(@Path("id") serviceOrderId: Int): Response<Unit>
+    // --- Booking Endpoints ---
+    @GET("bookings")
+    suspend fun getAllBookings(@Query("user_id") userId: Int? = null): Response<List<Booking>>
+
+    @POST("bookings")
+    suspend fun createBooking(@Body booking: Booking): Response<Booking>
+
+    @GET("bookings/{id}")
+    suspend fun getBookingById(@Path("id") bookingId: Int): Response<Booking>
+
+    @PUT("bookings/{id}")
+    suspend fun updateBooking(@Path("id") bookingId: Int, @Body booking: Booking): Response<Booking>
+
+    @DELETE("bookings/{id}")
+    suspend fun deleteBooking(@Path("id") bookingId: Int): Response<Unit>
+
+    // --- Schedule Endpoints ---
+    @GET("schedules")
+    suspend fun getAllSchedules(): Response<List<Schedule>>
+
+    @POST("schedules")
+    suspend fun createSchedule(@Body schedule: Schedule): Response<Schedule>
+
+    @GET("schedules/{id}")
+    suspend fun getScheduleById(@Path("id") scheduleId: Int): Response<Schedule>
+
+    @PUT("schedules/{id}")
+    suspend fun updateSchedule(@Path("id") scheduleId: Int, @Body schedule: Schedule): Response<Schedule>
+
+    @DELETE("schedules/{id}")
+    suspend fun deleteSchedule(@Path("id") scheduleId: Int): Response<Unit>
 }

@@ -1,7 +1,5 @@
-// data/local/dao/UserDao.kt
 package com.example.bengkelappclient.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.bengkelappclient.data.local.entity.UserEntity
 
@@ -14,5 +12,5 @@ interface UserDao {
     suspend fun getUserById(userId: Int): UserEntity?
 
     @Query("DELETE FROM users")
-    suspend fun clearUser() // Hapus semua user (jika hanya satu user yang login)
+    suspend fun clearUser()
 }

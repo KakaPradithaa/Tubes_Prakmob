@@ -1,4 +1,4 @@
-// data/model/Customer.kt
+// data/model/Service.kt
 package com.example.bengkelappclient.data.model
 
 import android.os.Parcelable
@@ -6,16 +6,13 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Customer(
+data class Service(
     val id: Int,
     val name: String,
-    @SerializedName("phone_number")
-    val phoneNumber: String,
-    val address: String?,
+    val description: String,
+    val price: Int,
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("updated_at")
-    val updatedAt: String?,
-    // Jika API Anda mengembalikan vehicles saat mengambil customer (eager loading)
-    // val vehicles: List<Vehicle>? = null
+    val updatedAt: String?
 ) : Parcelable

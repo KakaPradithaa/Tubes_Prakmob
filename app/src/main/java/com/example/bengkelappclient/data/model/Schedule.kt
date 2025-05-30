@@ -1,4 +1,4 @@
-// data/model/Vehicle.kt
+// data/model/Schedule.kt
 package com.example.bengkelappclient.data.model
 
 import android.os.Parcelable
@@ -6,15 +6,13 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Vehicle(
+data class Schedule(
     val id: Int,
-    @SerializedName("user_id")
-    val userId: Int,
-    val name: String,
-    val brand: String,
-    val year: Int,
-    @SerializedName("license_plate")
-    val licensePlate: String,
+    val day: String,
+    @SerializedName("open_time")
+    val openTime: String,
+    @SerializedName("close_time")
+    val closeTime: String,
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("updated_at")
