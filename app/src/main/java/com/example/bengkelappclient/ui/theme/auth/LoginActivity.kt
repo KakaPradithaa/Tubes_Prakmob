@@ -11,6 +11,7 @@ import com.example.bengkelappclient.databinding.ActivityLoginBinding
 import com.example.bengkelappclient.ui.auth.AuthViewModel
 import com.example.bengkelappclient.ui.auth.RegisterActivity
 import com.example.bengkelappclient.ui.theme.main.MainActivity
+import com.example.bengkelappclient.ui.theme.main.homepage
 import com.example.bengkelappclient.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,8 +60,8 @@ class LoginActivity : AppCompatActivity() {
                         binding.progressBarLogin.visibility = View.GONE
                         binding.btnLogin.isEnabled = true
                         Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show()
-                        // Navigasi ke MainActivity (Dashboard)
-                        startActivity(Intent(this, MainActivity::class.java))
+                        // Navigasi ke homepage
+                        startActivity(Intent(this, homepage::class.java))
                         finishAffinity() // Hapus semua activity sebelumnya dari back stack
                     }
                     is Resource.Error -> {
