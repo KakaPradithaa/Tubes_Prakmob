@@ -32,6 +32,7 @@
         android:exported="false" />
 <activity android:name=".ui.theme.auth.LoginActivity" />
 <activity android:name=".ui.auth.RegisterActivity" />
+        <activity android:name=".ui.theme.main.homepage"/>
 
     </application>
 
