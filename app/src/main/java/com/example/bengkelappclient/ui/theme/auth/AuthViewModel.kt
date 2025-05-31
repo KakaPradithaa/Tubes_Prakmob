@@ -39,10 +39,11 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun register(name: String, email: String, pass: String, passConfirm: String) {
+    fun register(name: String, email: String, pass: String, passConfirm: String, phone: String, address: String) { // Add phone and address
         viewModelScope.launch {
             _registerResult.value = Event(Resource.Loading())
-            val result = authRepository.register(name, email, pass, passConfirm)
+            // Pass phone and address to the repository
+            val result = authRepository.register(name, email, pass, passConfirm, phone, address)
             result.fold(
                 onSuccess = { authResponse ->
                     _registerResult.value = Event(Resource.Success(authResponse))

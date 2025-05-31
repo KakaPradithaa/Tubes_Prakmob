@@ -23,14 +23,16 @@ class AuthRepository @Inject constructor(
     val isLoggedIn: Flow<Boolean> = userPreferenceManager.isLoggedIn
     val authToken: Flow<String?> = userPreferenceManager.authToken
 
-    suspend fun register(name: String, email: String, pass: String, passConfirm: String): Result<AuthResponse> {
+    suspend fun register(name: String, email: String, pass: String, passConfirm: String, phone: String, address: String): Result<AuthResponse> { // Add phone and address
         return try {
             val response = apiService.registerUser(
                 mapOf(
                     "name" to name,
                     "email" to email,
                     "password" to pass,
-                    "password_confirmation" to passConfirm
+                    "confirm_password" to passConfirm, // Changed from "password_confirmation"
+                    "phone" to phone,                 // Add phone
+                    "address" to address                // Add address
                 )
             )
             if (response.isSuccessful && response.body() != null) {
@@ -40,12 +42,9 @@ class AuthRepository @Inject constructor(
                 response.body()?.user?.let { user ->
                     userPreferenceManager.saveUserName(user.name)
                     userPreferenceManager.saveUserEmail(user.email)
-                    // Opsional: simpan user ke Room
-                    // userDao.insertUser(UserEntity(user.id, user.name, user.email))
                 }
                 Result.success(response.body()!!)
             } else {
-                // Tangani error API (misal, parse error body jika ada)
                 Result.failure(Exception("Registration failed: ${response.code()} ${response.message()} - ${response.errorBody()?.string()}"))
             }
         } catch (e: Exception) {
