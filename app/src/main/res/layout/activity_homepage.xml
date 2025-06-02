@@ -79,7 +79,7 @@
             <!-- Banner -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout"
@@ -121,31 +121,29 @@ servis dengan mudah"
                         app:layout_constraintVertical_bias="0.504" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="129dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/orange_button_background"
-                    android:text="Reservasi Sekarang"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
-                    app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <Button
+                android:id="@+id/btnReservasi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RESERVASI SEKARANG"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/indigoblue"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_gravity="center_horizontal" />
             <!-- Label Layanan -->
             <TextView
                 android:id="@+id/textView9"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Layanan Tersedia"
-                android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="19sp"
-                android:gravity="center"/>
+                android:layout_gravity="center_horizontal"
+                />
 
             <!-- Grid Kotak Layanan -->
             <GridLayout
