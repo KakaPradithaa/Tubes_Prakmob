@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 binding.tvWelcomeMessage.text = "Selamat Datang, ${name ?: "Pengguna"}!"
             }
         }
-        binding.tvDashboardContent.text = "Ini adalah halaman Dashboard Bengkel App."
+        binding.tvDashboardContent.text = "Ini adalah halaman Dashboard Bengkel ."
 
     }
 

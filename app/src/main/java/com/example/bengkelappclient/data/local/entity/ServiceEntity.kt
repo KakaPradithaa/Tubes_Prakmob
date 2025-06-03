@@ -8,5 +8,6 @@ data class ServiceEntity(
     @PrimaryKey val id: Int,
     val name: String,
     val description: String,
-    val price: Int // harga dalam Rupiah
+    val price: Int, // harga dalam Rupiah
+    val img: String?
 )

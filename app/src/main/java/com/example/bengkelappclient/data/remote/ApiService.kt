@@ -1,6 +1,8 @@
 package com.example.bengkelappclient.data.remote
 
 import com.example.bengkelappclient.data.model.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -39,8 +41,14 @@ interface ApiService {
     @GET("services")
     suspend fun getAllServices(): Response<List<Service>>
 
+    @Multipart
     @POST("services")
-    suspend fun createService(@Body service: Service): Response<Service>
+    suspend fun addService(
+        @Part("name") name: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("price") price: RequestBody,
+        @Part img: MultipartBody.Part? = null
+    ): Response<Service>
 
     @GET("services/{id}")
     suspend fun getServiceById(@Path("id") serviceId: Int): Response<Service>

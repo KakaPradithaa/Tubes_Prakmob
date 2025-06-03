@@ -3,6 +3,7 @@ package com.example.bengkelappclient.ui.theme.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.bengkelappclient.databinding.ActivityLoginBinding
 import com.example.bengkelappclient.ui.auth.AuthViewModel
 import com.example.bengkelappclient.ui.auth.RegisterActivity
+import com.example.bengkelappclient.ui.service.AddServiceActivity
 import com.example.bengkelappclient.ui.theme.main.MainActivity
 import com.example.bengkelappclient.ui.theme.main.homepage
 import com.example.bengkelappclient.util.Resource
@@ -60,9 +62,17 @@ class LoginActivity : AppCompatActivity() {
                         binding.progressBarLogin.visibility = View.GONE
                         binding.btnLogin.isEnabled = true
                         Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show()
-                        // Navigasi ke homepage
-                        startActivity(Intent(this, homepage::class.java))
-                        finishAffinity() // Hapus semua activity sebelumnya dari back stack
+
+                        val user = resource.data?.data // Ganti dari `.user` ke `.data`
+                        val role = user?.role
+                        Log.d("LoginActivity", "User Name: $user, Role: $role")
+                        if (role == "admin") {
+                            startActivity(Intent(this, AddServiceActivity::class.java))
+                        } else {
+                            startActivity(Intent(this, homepage::class.java))
+                        }
+
+                        finishAffinity()
                     }
                     is Resource.Error -> {
                         binding.progressBarLogin.visibility = View.GONE

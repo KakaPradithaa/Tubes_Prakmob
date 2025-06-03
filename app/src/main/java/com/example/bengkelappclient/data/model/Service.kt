@@ -11,6 +11,7 @@ data class Service(
     val name: String,
     val description: String,
     val price: Int,
+    val img: String?,
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("updated_at")
