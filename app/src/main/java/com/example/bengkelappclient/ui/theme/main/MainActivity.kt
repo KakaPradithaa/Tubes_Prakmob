@@ -54,8 +54,7 @@ class MainActivity : AppCompatActivity() {
                 binding.tvWelcomeMessage.text = "Selamat Datang, ${name ?: "Pengguna"}!"
             }
         }
-        binding.tvDashboardContent.text = "Ini adalah halaman Dashboard Bengkel ."
-
+        binding.tvDashboardContent.text = "Ini adalah halaman Dashboard Bengkel App."
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

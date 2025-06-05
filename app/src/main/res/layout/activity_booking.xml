@@ -177,21 +177,6 @@
             android:weightSum="3">
 
             <ImageView
-                android:id="@+id/nav_profile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/btn_4"
-                android:contentDescription="Profile"
-                app:tint="@color/indigoblue"
-                android:layout_gravity="center" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageView
                 android:id="@+id/nav_setting"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -200,6 +185,22 @@
                 android:contentDescription="Settings"
                 app:tint="@color/indigoblue"
                 android:layout_gravity="center" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/nav_profile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/btn_4"
+                android:contentDescription="Profile"
+                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/indigoblue" />
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>
 
