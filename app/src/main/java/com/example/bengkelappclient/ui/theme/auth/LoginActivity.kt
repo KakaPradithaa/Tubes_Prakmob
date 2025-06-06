@@ -1,6 +1,7 @@
 // ui/auth/LoginActivity.kt
 package com.example.bengkelappclient.ui.theme.auth
 
+import android.content.Context // Import ini
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +13,6 @@ import com.example.bengkelappclient.databinding.ActivityLoginBinding
 import com.example.bengkelappclient.ui.auth.AuthViewModel
 import com.example.bengkelappclient.ui.auth.RegisterActivity
 import com.example.bengkelappclient.ui.service.AddServiceActivity
-import com.example.bengkelappclient.ui.theme.main.MainActivity
 import com.example.bengkelappclient.ui.theme.main.homepage
 import com.example.bengkelappclient.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,12 +63,23 @@ class LoginActivity : AppCompatActivity() {
                         binding.btnLogin.isEnabled = true
                         Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show()
 
-                        val user = resource.data?.data // Ganti dari `.user` ke `.data`
+                        val user = resource.data?.data
                         val role = user?.role
-                        Log.d("LoginActivity", "User Name: $user, Role: $role")
+                        val userName = user?.name // Asumsi 'name' adalah bidang untuk nama pengguna
+
+                        Log.d("LoginActivity", "User Name: $userName, Role: $role")
+
+                        // --- SIMPAN NAMA PENGGUNA KE SHARED PREFERENCES ---
+                        val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                        with (sharedPref.edit()) {
+                            putString("USERNAME", userName)
+                            apply() // Gunakan apply() untuk menyimpan secara asynchronous
+                        }
+
                         if (role == "admin") {
                             startActivity(Intent(this, AddServiceActivity::class.java))
                         } else {
+                            // Tidak perlu lagi mengirim username via Intent, karena sudah di SharedPreferences
                             startActivity(Intent(this, homepage::class.java))
                         }
 
