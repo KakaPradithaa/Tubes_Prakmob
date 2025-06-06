@@ -339,13 +339,14 @@ servis dengan mudah"
             android:paddingHorizontal="36dp"
             android:weightSum="3">
 
-            <ImageView
-                android:id="@+id/nav_setting"
+            <ImageButton
+                android:id="@+id/nav_history"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/setting"
-                android:contentDescription="Settings"
+                android:src="@drawable/orderstatus"
+                android:contentDescription="History"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/indigoblue"
                 android:layout_gravity="center" />
 
