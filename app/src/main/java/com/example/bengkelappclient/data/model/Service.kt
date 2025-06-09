@@ -15,5 +15,6 @@ data class Service(
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("updated_at")
-    val updatedAt: String?
+    val updatedAt: String?,
+    var isSelected: Boolean = false
 ) : Parcelable

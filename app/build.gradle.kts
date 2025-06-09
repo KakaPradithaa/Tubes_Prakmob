@@ -61,6 +61,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity-ktx:1.8.2") // Untuk by viewModels()
     implementation("androidx.fragment:fragment-ktx:1.6.2") // Untuk by viewModels() di Fragment
+    implementation("com.github.bumptech.glide:glide:4.16.0")//library Glide untuk memuat gambar dari URL
 
     // --- RecyclerView ---
     implementation("androidx.recyclerview:recyclerview:1.3.2") // <--- DITAMBAHKAN INI (Gunakan versi terbaru yang stabil)
