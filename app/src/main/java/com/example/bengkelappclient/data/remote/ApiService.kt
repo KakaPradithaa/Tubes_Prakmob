@@ -1,6 +1,7 @@
 package com.example.bengkelappclient.data.remote
 
 import com.example.bengkelappclient.data.model.*
+import com.example.bengkelappclient.util.toRequestBody
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -90,4 +91,18 @@ interface ApiService {
 
     @DELETE("schedules/{id}")
     suspend fun deleteSchedule(@Path("id") scheduleId: Int): Response<Unit>
+
+
+    //-- Admin Endpoints--
+
+    @Multipart
+    @POST("services/{id}")
+    suspend fun updateService(
+        @Path("id") serviceId: Int,
+        @Part("name") name: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("price") price: RequestBody,
+        @Part image: MultipartBody.Part?,
+        @Part("_method") method: RequestBody
+    ): Response<Unit>
 }

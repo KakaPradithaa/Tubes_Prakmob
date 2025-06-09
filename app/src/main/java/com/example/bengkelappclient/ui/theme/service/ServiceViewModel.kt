@@ -4,76 +4,61 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bengkelappclient.data.model.Service // Import model Service
-import com.example.bengkelappclient.data.model.ServiceResult // Import ServiceResult
-import com.example.bengkelappclient.data.repository.ServiceRepository // Import ServiceRepository
+import com.example.bengkelappclient.data.model.Service
+import com.example.bengkelappclient.data.model.ServiceResult
+import com.example.bengkelappclient.data.repository.ServiceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
 
-/**
- * ViewModel for managing service-related operations.
- * Uses Hilt for dependency injection to provide ServiceRepository.
- */
 @HiltViewModel
 class ServiceViewModel @Inject constructor(
     private val serviceRepository: ServiceRepository
 ) : ViewModel() {
 
-    // MutableLiveData to hold the result of service operations.
-    // It's private to ensure only the ViewModel can modify its value.
+    // Untuk hasil operasi Add
     private val _serviceResult = MutableLiveData<ServiceResult<Service>>()
-
-    // Public LiveData to expose the service result to the UI.
-    // UI components can observe this LiveData for updates.
     val serviceResult: LiveData<ServiceResult<Service>> = _serviceResult
 
-    /**
-     * Adds a new service by calling the repository.
-     * The result (Loading, Success, or Error) is posted to _serviceResult.
-     *
-     * @param name RequestBody for the service name.
-     * @param description RequestBody for the service description.
-     * @param price RequestBody for the service price.
-     * @param image Optional MultipartBody.Part for the service image.
-     */
+    // Untuk hasil operasi Delete
+    private val _deleteResult = MutableLiveData<ServiceResult<String>>()
+    val deleteResult: LiveData<ServiceResult<String>> = _deleteResult
+
+    // Untuk hasil operasi Update
+    private val _updateResult = MutableLiveData<ServiceResult<String>>()
+    val updateResult: LiveData<ServiceResult<String>> = _updateResult
+
+    // Untuk mengambil semua services
+    private val _allServices = MutableLiveData<ServiceResult<List<Service>>>()
+    val allServices: LiveData<ServiceResult<List<Service>>> = _allServices
+
     fun addService(
         name: RequestBody,
         description: RequestBody,
         price: RequestBody,
         image: MultipartBody.Part?
     ) {
-        // Launch a coroutine in the ViewModel's scope for background operations.
         viewModelScope.launch {
-            // Post Loading state immediately.
             _serviceResult.value = ServiceResult.Loading
             try {
-                // Call the repository to add the service.
                 val response = serviceRepository.addService(name, description, price, image)
                 if (response.isSuccessful) {
-                    // If the API call is successful, post Success with the response body.
                     response.body()?.let { service ->
                         _serviceResult.value = ServiceResult.Success(service)
                     } ?: run {
-                        // If body is null despite success, post an Error.
                         _serviceResult.value = ServiceResult.Error(Exception("Response body is null"))
                     }
                 } else {
-                    // If the API call is not successful, extract error message and post Error.
                     val errorMessage = response.errorBody()?.string() ?: "Unknown error"
                     _serviceResult.value = ServiceResult.Error(Exception(errorMessage), errorMessage)
                 }
             } catch (e: Exception) {
-                // Catch any exceptions during the network call and post Error.
                 _serviceResult.value = ServiceResult.Error(e, e.message)
             }
         }
     }
-
-    private val _allServices = MutableLiveData<ServiceResult<List<Service>>>()
-    val allServices: LiveData<ServiceResult<List<Service>>> = _allServices
 
     fun fetchAllServices() {
         viewModelScope.launch {
@@ -96,35 +81,49 @@ class ServiceViewModel @Inject constructor(
         }
     }
 
-
-    // You might also want a function to reset the serviceResult state after an operation
-    fun resetServiceResult() {
-        _serviceResult.value = null // Or a specific initial state
+    fun deleteService(serviceId: Int) {
+        viewModelScope.launch {
+            _deleteResult.value = ServiceResult.Loading
+            try {
+                val response = serviceRepository.deleteService(serviceId)
+                if (response.isSuccessful) {
+                    _deleteResult.value = ServiceResult.Success("Layanan berhasil dihapus")
+                    fetchAllServices() // Refresh daftar setelah berhasil hapus
+                } else {
+                    val errorMsg = response.errorBody()?.string() ?: "Gagal menghapus"
+                    _deleteResult.value = ServiceResult.Error(Exception(errorMsg), errorMsg)
+                }
+            } catch (e: Exception) {
+                _deleteResult.value = ServiceResult.Error(e, e.message)
+            }
+        }
     }
 
-    // Add other service-related functions here, e.g., get all services, get service by ID, etc.
-    // Example:
-    // private val _allServices = MutableLiveData<ServiceResult<List<Service>>>()
-    // val allServices: LiveData<ServiceResult<List<Service>>> = _allServices
-    //
-    // fun fetchAllServices() {
-    //     viewModelScope.launch {
-    //         _allServices.value = ServiceResult.Loading
-    //         try {
-    //             val response = serviceRepository.getAllServices()
-    //             if (response.isSuccessful) {
-    //                 response.body()?.let { services ->
-    //                     _allServices.value = ServiceResult.Success(services)
-    //                 } ?: run {
-    //                     _allServices.value = ServiceResult.Error(Exception("Response body is null"))
-    //                 }
-    //             } else {
-    //                 val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-    //                 _allServices.value = ServiceResult.Error(Exception(errorMessage), errorMessage)
-    //             }
-    //         } catch (e: Exception) {
-    //             _allServices.value = ServiceResult.Error(e, e.message)
-    //         }
-    //     }
-    // }
+    fun updateService(
+        serviceId: Int,
+        name: RequestBody,
+        description: RequestBody,
+        price: RequestBody,
+        image: MultipartBody.Part?
+    ) {
+        viewModelScope.launch {
+            _updateResult.value = ServiceResult.Loading
+            try {
+                val response = serviceRepository.updateService(serviceId, name, description, price, image)
+
+                // --- LOGIKA YANG DIPERBAIKI ---
+                if (response.isSuccessful) {
+                    // Jika response sukses, kirim pesan String, bukan objek Service.
+                    _updateResult.value = ServiceResult.Success("Layanan berhasil diperbarui")
+                } else {
+                    val errorMsg = response.errorBody()?.string() ?: "Gagal memperbarui"
+                    _updateResult.value = ServiceResult.Error(Exception(errorMsg), errorMsg)
+                }
+                // -----------------------------
+
+            } catch (e: Exception) {
+                _updateResult.value = ServiceResult.Error(e, e.message)
+            }
+        }
+    }
 }
