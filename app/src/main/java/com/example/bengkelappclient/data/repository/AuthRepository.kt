@@ -3,7 +3,6 @@ package com.example.bengkelappclient.data.repository
 import com.example.bengkelappclient.data.datastore.UserPreferenceManager
 import com.example.bengkelappclient.data.local.dao.UserDao
 import com.example.bengkelappclient.data.model.AuthResponse
-import com.example.bengkelappclient.data.model.UserData
 import com.example.bengkelappclient.data.remote.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -37,6 +36,7 @@ class AuthRepository @Inject constructor(
                     userPreferenceManager.saveAuthToken(user.token)
                     userPreferenceManager.saveUserName(user.name)
                     userPreferenceManager.saveUserEmail(user.email)
+                    userPreferenceManager.saveUserId(user.id) // PASTIKAN BARIS INI ADA
                     // Optional simpan ke Room
                     // userDao.insertUser(UserEntity(0, user.name, user.email))
                 }
@@ -62,6 +62,7 @@ class AuthRepository @Inject constructor(
                     userPreferenceManager.saveAuthToken(user.token)
                     userPreferenceManager.saveUserName(user.name)
                     userPreferenceManager.saveUserEmail(user.email)
+                    userPreferenceManager.saveUserId(user.id) // PASTIKAN BARIS INI ADA
                     // Optional simpan ke Room
                     // userDao.insertUser(UserEntity(0, user.name, user.email))
                 }
@@ -92,4 +93,5 @@ class AuthRepository @Inject constructor(
 
     fun getCurrentUserName(): Flow<String?> = userPreferenceManager.userName
     fun getCurrentUserEmail(): Flow<String?> = userPreferenceManager.userEmail
+    fun getCurrentUserId(): Flow<Int?> = userPreferenceManager.userId // PASTIKAN FUNGSI INI ADA
 }

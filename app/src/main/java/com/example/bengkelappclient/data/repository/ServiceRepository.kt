@@ -7,8 +7,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import javax.inject.Inject
-import okhttp3.MediaType.Companion.toMediaTypeOrNull // <-- TAMBAHKAN IMPORT INI
-import okhttp3.RequestBody.Companion.toRequestBody // <-- TAMBAHKAN IMPORT INI
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class ServiceRepository @Inject constructor(
     private val apiService: ApiService,
@@ -41,5 +41,10 @@ class ServiceRepository @Inject constructor(
 
     suspend fun getAllServices(): Response<List<Service>> {
         return apiService.getAllServices()
+    }
+
+    // Fungsi getServiceById yang Anda tanyakan, sudah ditambahkan kembali
+    suspend fun getServiceById(serviceId: Int): Response<Service> {
+        return apiService.getServiceById(serviceId)
     }
 }

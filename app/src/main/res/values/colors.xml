@@ -9,4 +9,30 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+
+    <color name="status_cancelled_bg">#FFE1E1</color>
+    <color name="status_cancelled_text">#E93131</color>
+
+    <color name="status_completed_bg">#E8F5E8</color>
+    <color name="status_completed_text">#2E7D32</color>
+
+    <color name="status_in_progress_bg">#FFF8E1</color>
+    <color name="status_in_progress_text">#F57C00</color>
+
+    <color name="status_pending_bg">#FFFDE7</color>
+    <color name="status_pending_text">#F6D329</color>
+    <color name="status_confirmed_bg">#E0F7FA</color>
+    <color name="status_confirmed_text">#00BCD4</color>
+    <color name="status_default_bg">#F0F0F0</color>
+    <color name="status_default_text">#666666</color>
+
+    <color name="red_light">#FFE1E1</color>
+    <color name="red_dark">#E93131</color>
+    <color name="green_light">#2E7D32</color>
+    <color name="green_dark">#C8F2C9</color>
+    <color name="orange_light">#FFF8E1</color>
+    <color name="orange_dark">#F57C00</color>
+    <color name="grey_light">#F0F0F0</color>
+    <color name="grey_dark">#666666</color>
+
 </resources>

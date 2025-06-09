@@ -1,4 +1,3 @@
-// data/model/Vehicle.kt
 package com.example.bengkelappclient.data.model
 
 import android.os.Parcelable
@@ -10,6 +9,7 @@ data class Vehicle(
     val id: Int,
     @SerializedName("user_id")
     val userId: Int,
+    @SerializedName("model")
     val name: String,
     val brand: String,
     val year: Int,
