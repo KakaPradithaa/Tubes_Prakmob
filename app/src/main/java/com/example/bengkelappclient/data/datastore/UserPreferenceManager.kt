@@ -1,11 +1,11 @@
-// data/datastore/UserPreferenceManager.kt
 package com.example.bengkelappclient.data.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey // Pastikan import ini benar
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey // Pastikan import ini ada
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -13,20 +13,18 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// Deklarasikan DataStore di top-level file (cukup sekali per aplikasi)
-// Nama "user_prefs" adalah nama file preferences yang akan dibuat.
+
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "bengkel_user_preferences") // Memberi nama yang lebih deskriptif
 
 @Singleton
 class UserPreferenceManager @Inject constructor(@ApplicationContext private val context: Context) {
 
     // Menggunakan 'private object' untuk mengelompokkan keys
-    private object PreferenceKeys { // <--- PERBAIKAN DI SINI (nama object)
-        // Menggunakan named argument 'name' untuk stringPreferencesKey
-        val AUTH_TOKEN = stringPreferencesKey(name = "auth_token") // <--- PERBAIKAN DI SINI
-        val USER_NAME = stringPreferencesKey(name = "user_name")   // <--- PERBAIKAN DI SINI
-        val USER_EMAIL = stringPreferencesKey(name = "user_email") // <--- PERBAIKAN DI SINI
-        // Tambahkan key lain jika perlu
+    private object PreferenceKeys {
+        val AUTH_TOKEN = stringPreferencesKey(name = "auth_token")
+        val USER_NAME = stringPreferencesKey(name = "user_name")
+        val USER_EMAIL = stringPreferencesKey(name = "user_email")
+        val USER_ID = intPreferencesKey(name = "user_id") // BARU: Tambahkan kunci untuk ID pengguna
     }
 
     // --- Auth Token ---
@@ -47,6 +45,7 @@ class UserPreferenceManager @Inject constructor(@ApplicationContext private val 
             // Juga hapus info user lain saat logout
             preferences.remove(PreferenceKeys.USER_NAME)
             preferences.remove(PreferenceKeys.USER_EMAIL)
+            preferences.remove(PreferenceKeys.USER_ID) // BARU: Hapus ID pengguna saat logout
         }
     }
 
@@ -76,6 +75,18 @@ class UserPreferenceManager @Inject constructor(@ApplicationContext private val 
     suspend fun saveUserEmail(email: String) {
         context.dataStore.edit { prefs ->
             prefs[PreferenceKeys.USER_EMAIL] = email
+        }
+    }
+
+    // BARU: Fungsi untuk menyimpan dan mendapatkan ID pengguna
+    val userId: Flow<Int?> = context.dataStore.data
+        .map { prefs ->
+            prefs[PreferenceKeys.USER_ID]
+        }
+
+    suspend fun saveUserId(id: Int) {
+        context.dataStore.edit { prefs ->
+            prefs[PreferenceKeys.USER_ID] = id
         }
     }
 
