@@ -171,8 +171,10 @@ class homepage : AppCompatActivity() {
     }
 
     private fun onServiceItemClick(service: com.example.bengkelappclient.data.model.Service) {
-        // Implementasi ketika service item diklik
-        Toast.makeText(this, "Layanan: ${service.name}", Toast.LENGTH_SHORT).show()
-        // Anda bisa menambahkan navigasi ke halaman detail service di sini
+        val intent = Intent(this, DetailLayananActivity::class.java)
+        intent.putExtra("judul_layanan", service.name)
+        intent.putExtra("deskripsi_layanan", service.description)
+        intent.putExtra("image_layanan_url", "http://10.0.2.2:8000/uploads/services/" + service.img)
+        startActivity(intent)
     }
 }
