@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_light"
-    tools:context=".ui.theme.main.AdminHomepageActivity">
+    tools:context=".ui.theme.admin.AdminHomepageActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/headerCard"

@@ -1,11 +1,11 @@
-package com.example.bengkelappclient.ui.theme.main
+package com.example.bengkelappclient.ui.theme.admin
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bengkelappclient.databinding.ActivityAdminHomepageBinding
-import com.example.bengkelappclient.ui.service.AddServiceActivity
+import com.example.bengkelappclient.ui.schedule.ScheduleActivity
 import com.example.bengkelappclient.ui.service.ServiceListActivity
 
 
@@ -36,7 +36,7 @@ class AdminHomepageActivity : AppCompatActivity() {
         }
 
         binding.btnWorkshopSchedule.setOnClickListener {
-            Toast.makeText(this, "Halaman Jadwal Operasi Bengkel belum tersedia", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ScheduleActivity::class.java))
         }
     }
 

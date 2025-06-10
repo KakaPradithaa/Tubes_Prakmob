@@ -33,12 +33,16 @@
         <activity android:name=".ui.theme.auth.LoginActivity" />
         <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.theme.main.homepage"/>
-        <activity android:name=".ui.service.AddServiceActivity" />
+        <activity android:name=".ui.theme.admin.AddServiceActivity" />
         <activity android:name=".ui.service.ServiceListActivity" />
         <activity android:name=".ui.theme.main.BookingActivity" />
         <activity android:name=".ui.theme.main.EditProfileActivity" />
         <activity android:name=".ui.theme.order.OrderStatusActivity"/>
-        <activity android:name=".ui.theme.main.AdminHomepageActivity"/>
+        <activity android:name=".ui.theme.admin.AdminHomepageActivity"/>
+        <activity
+            android:name=".ui.schedule.ScheduleActivity"
+            android:exported="false"
+            android:label="Kelola Jadwal" />
 
     </application>
 
