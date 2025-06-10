@@ -201,13 +201,14 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- BottomAppBar dan FAB -->
+    <!-- BottomAppBar -->
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="bottom"
         android:backgroundTint="#FFFFFF"
+        android:paddingBottom="4dp"
         app:fabAlignmentMode="center"
         app:fabCradleRoundedCornerRadius="30dp"
         app:fabCradleMargin="10dp"
@@ -221,13 +222,14 @@
             android:paddingHorizontal="36dp"
             android:weightSum="3">
 
-            <ImageView
-                android:id="@+id/nav_setting"
+            <ImageButton
+                android:id="@+id/nav_history"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/setting"
-                android:contentDescription="@string/nav_setting"
+                android:src="@drawable/orderstatus"
+                android:contentDescription="History"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/indigoblue"
                 android:layout_gravity="center" />
 
@@ -241,25 +243,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
                 android:src="@drawable/btn_4"
-                android:contentDescription="@string/nav_profile"
+                android:contentDescription="Profile"
                 android:layout_gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/indigoblue" />
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>
 
+    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/home"
         android:backgroundTint="@color/indigoblue"
-        android:contentDescription="@string/fab_home"
         app:tint="#FFFFFF"
         app:layout_anchor="@id/bottomAppBar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

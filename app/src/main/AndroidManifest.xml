@@ -39,6 +39,7 @@
         <activity android:name=".ui.theme.main.EditProfileActivity" />
         <activity android:name=".ui.theme.order.OrderStatusActivity"/>
         <activity android:name=".ui.theme.admin.AdminHomepageActivity"/>
+        <activity android:name=".ui.theme.main.DetailLayananActivity"/>
         <activity
             android:name=".ui.schedule.ScheduleActivity"
             android:exported="false"

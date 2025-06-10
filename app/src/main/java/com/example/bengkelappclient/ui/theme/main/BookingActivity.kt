@@ -1,6 +1,7 @@
 package com.example.bengkelappclient.ui.theme.main
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bengkelappclient.R
 import com.example.bengkelappclient.databinding.ActivityBookingBinding
+import com.example.bengkelappclient.ui.theme.order.OrderStatusActivity
 import java.util.*
 
 class BookingActivity : AppCompatActivity() {
@@ -39,6 +41,7 @@ class BookingActivity : AppCompatActivity() {
         setupTimeSpinner()
         setupDatePicker()
         setupConfirmButton()
+        setupBottomNavButtons() // ← Tambahkan ini
     }
 
     private fun setupServiceSpinner() {
@@ -77,20 +80,35 @@ class BookingActivity : AppCompatActivity() {
             val layanan = binding.spinnerService.selectedItem.toString()
             val tanggal = binding.btnDate.text.toString()
             val jam = binding.spinnerTime.selectedItem.toString()
-            val merk = binding.editMerk.text.toString()
+            val brand = binding.editBrand.text.toString()
+            val model = binding.editModel.text.toString()
             val plat = binding.editPlat.text.toString()
             val keluhan = binding.editKeluhan.text.toString()
 
-            if (merk.isBlank() || plat.isBlank() || keluhan.isBlank() || tanggal == "Pilih Tanggal") {
+            if (model.isBlank() || plat.isBlank() || keluhan.isBlank() || tanggal == "Pilih Tanggal") {
                 Toast.makeText(this, "Mohon isi semua data dengan lengkap", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             Toast.makeText(
                 this,
-                "Booking berhasil:\nLayanan: $layanan\nTanggal: $tanggal\nJam: $jam\nMerk: $merk\nPlat: $plat\nKeluhan: $keluhan",
+                "Booking berhasil:\nLayanan: $layanan\nTanggal: $tanggal\nJam: $jam\nBrand: $brand\nModel: $model\nPlat: $plat\nKeluhan: $keluhan",
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    private fun setupBottomNavButtons() {
+        binding.navHistory.setOnClickListener {
+            startActivity(Intent(this, OrderStatusActivity::class.java))
+        }
+
+        binding.navProfile.setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+
+        binding.fabHome.setOnClickListener {
+            startActivity(Intent(this, homepage::class.java))
         }
     }
 }

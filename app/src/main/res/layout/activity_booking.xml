@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:paddingBottom="100dp"> <!-- memberi ruang untuk bottom app bar -->
+            android:paddingBottom="100dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -102,18 +102,33 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp" />
 
-                        <!-- Data Kendaraan -->
+                        <!-- Brand Kendaraan -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp"
-                            android:hint="Merk Kendaraan">
+                            android:hint="Brand Kendaraan">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editMerk"
+                                android:id="@+id/editBrand"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+
+                        <!-- Model Kendaraan -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:hint="Model Kendaraan">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editModel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <!-- Plat Nomor -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -125,6 +140,7 @@
                                 android:layout_height="wrap_content" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <!-- Keluhan Kendaraan -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -155,7 +171,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Bottom App Bar -->
+    <!-- BottomAppBar -->
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
@@ -176,13 +192,14 @@
             android:paddingHorizontal="36dp"
             android:weightSum="3">
 
-            <ImageView
-                android:id="@+id/nav_setting"
+            <ImageButton
+                android:id="@+id/nav_history"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/setting"
-                android:contentDescription="Settings"
+                android:src="@drawable/orderstatus"
+                android:contentDescription="History"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/indigoblue"
                 android:layout_gravity="center" />
 
@@ -215,5 +232,4 @@
         android:backgroundTint="@color/indigoblue"
         app:tint="#FFFFFF"
         app:layout_anchor="@id/bottomAppBar" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
