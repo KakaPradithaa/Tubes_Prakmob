@@ -1,7 +1,6 @@
 // ui/theme/main/homepage.kt
 package com.example.bengkelappclient.ui.theme.main
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +16,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.bengkelappclient.R
-import com.example.bengkelappclient.data.model.ServiceResult
+import com.example.bengkelappclient.util.Resource // Pastikan import Resource
 import com.example.bengkelappclient.ui.theme.order.OrderStatusActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,52 +25,22 @@ class homepage : AppCompatActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var gridLayoutLayanan: GridLayout
+    private lateinit var usernameTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homepage)
 
-        // Temukan TextView untuk nama pengguna
-        val usernameTextView = findViewById<TextView>(R.id.textView4)
-
-        // Temukan GridLayout
+        // Inisialisasi Views
+        usernameTextView = findViewById(R.id.textView4)
         gridLayoutLayanan = findViewById(R.id.gridLayoutLayanan)
-
-        // Setup GridLayout properties
         setupGridLayout()
 
-        // --- AMBIL NAMA PENGGUNA DARI SHARED PREFERENCES ---
-        val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
-        val username = sharedPref.getString("USERNAME", "Pengguna")
+        // Setup tombol-tombol navigasi
+        setupButtons()
 
-        // Atur nama pengguna ke TextView
-        username?.let {
-            usernameTextView.text = it
-        }
-
-        // Tombol untuk Booking Service
-        val btnReservasi = findViewById<Button>(R.id.btnReservasi)
-        btnReservasi.setOnClickListener {
-            val intent = Intent(this, BookingActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Tombol untuk ke halaman Edit Profil
-        val profileButton = findViewById<ImageButton>(R.id.nav_profile)
-        profileButton.setOnClickListener {
-            val intent = Intent(this, EditProfileActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Tombol untuk ke halaman Order Status
-        val historyButton = findViewById<ImageButton>(R.id.nav_history)
-        historyButton.setOnClickListener {
-            val intent = Intent(this, OrderStatusActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Amati layanan dari ViewModel
-        observeServices()
+        // Amati semua LiveData dari ViewModel
+        observeViewModel()
     }
 
     private fun setupGridLayout() {
@@ -84,26 +53,44 @@ class homepage : AppCompatActivity() {
         gridLayoutLayanan.useDefaultMargins = false
     }
 
-    private fun observeServices() {
+    private fun setupButtons() {
+        findViewById<Button>(R.id.btnReservasi).setOnClickListener {
+            startActivity(Intent(this, BookingActivity::class.java))
+        }
+        findViewById<ImageButton>(R.id.nav_profile).setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+        findViewById<ImageButton>(R.id.nav_history).setOnClickListener {
+            startActivity(Intent(this, OrderStatusActivity::class.java))
+        }
+    }
+
+    private fun observeViewModel() {
+        // --- KODE BARU UNTUK MENGAMATI NAMA PENGGUNA ---
+        homeViewModel.userName.observe(this) { name ->
+            usernameTextView.text = name
+        }
+
+        // --- KODE YANG SUDAH DIPERBAIKI UNTUK MENGAMATI LAYANAN ---
         homeViewModel.services.observe(this) { result ->
             when (result) {
-                is ServiceResult.Loading -> {
+                is Resource.Loading -> {
                     Log.d("Homepage", "Memuat layanan...")
+                    // Tampilkan ProgressBar di sini jika ada
                 }
-                is ServiceResult.Success -> {
+                is Resource.Success -> {
+                    // Sembunyikan ProgressBar
                     val services = result.data
                     if (!services.isNullOrEmpty()) {
                         displayServicesInGrid(services)
-                        Log.d("Homepage", "Layanan berhasil dimuat: ${services.size} item")
                     } else {
                         Toast.makeText(this, "Tidak ada layanan tersedia.", Toast.LENGTH_SHORT).show()
-                        Log.d("Homepage", "Daftar layanan kosong.")
                     }
                 }
-                is ServiceResult.Error -> {
+                is Resource.Error -> {
+                    // Sembunyikan ProgressBar dan tampilkan error
                     val errorMessage = result.message ?: "Gagal memuat layanan."
                     Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-                    Log.e("Homepage", "Error memuat layanan: $errorMessage", result.exception)
                 }
             }
         }

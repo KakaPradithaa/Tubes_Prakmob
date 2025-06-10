@@ -34,7 +34,7 @@
         <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.theme.main.homepage"/>
         <activity android:name=".ui.theme.admin.AddServiceActivity" />
-        <activity android:name=".ui.service.ServiceListActivity" />
+        <activity android:name=".ui.theme.service.ServiceListActivity" />
         <activity android:name=".ui.theme.main.BookingActivity" />
         <activity android:name=".ui.theme.main.EditProfileActivity" />
         <activity android:name=".ui.theme.order.OrderStatusActivity"/>

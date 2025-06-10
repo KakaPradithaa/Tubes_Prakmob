@@ -32,13 +32,14 @@ class AuthRepository @Inject constructor(
                 )
             )
             if (response.isSuccessful && response.body() != null) {
+                // Simpan semua data user ke DataStore setelah register
                 response.body()?.data?.let { user ->
                     userPreferenceManager.saveAuthToken(user.token)
+                    userPreferenceManager.saveUserId(user.id)
                     userPreferenceManager.saveUserName(user.name)
                     userPreferenceManager.saveUserEmail(user.email)
-                    userPreferenceManager.saveUserId(user.id) // PASTIKAN BARIS INI ADA
-                    // Optional simpan ke Room
-                    // userDao.insertUser(UserEntity(0, user.name, user.email))
+                    // BARU: Menyimpan role pengguna
+                    userPreferenceManager.saveUserRole(user.role)
                 }
                 Result.success(response.body()!!)
             } else {
@@ -58,13 +59,14 @@ class AuthRepository @Inject constructor(
                 )
             )
             if (response.isSuccessful && response.body() != null) {
+                // Simpan semua data user ke DataStore setelah login
                 response.body()?.data?.let { user ->
                     userPreferenceManager.saveAuthToken(user.token)
+                    userPreferenceManager.saveUserId(user.id)
                     userPreferenceManager.saveUserName(user.name)
                     userPreferenceManager.saveUserEmail(user.email)
-                    userPreferenceManager.saveUserId(user.id) // PASTIKAN BARIS INI ADA
-                    // Optional simpan ke Room
-                    // userDao.insertUser(UserEntity(0, user.name, user.email))
+                    // BARU: Menyimpan role pengguna
+                    userPreferenceManager.saveUserRole(user.role)
                 }
                 Result.success(response.body()!!)
             } else {
@@ -77,21 +79,26 @@ class AuthRepository @Inject constructor(
 
     suspend fun logout(): Result<Unit> {
         return try {
-            if (userPreferenceManager.getToken().first() != null) {
-                val response = apiService.logoutUser()
-                if (!response.isSuccessful) {
-                    println("API logout failed: ${response.code()} ${response.message()}")
-                }
-            }
+            // Selalu bersihkan data lokal, tidak peduli API logout berhasil atau tidak
             userPreferenceManager.clearAuthToken()
+
+            // Mencoba memanggil API logout, tapi tidak menghentikan proses jika gagal
+            try {
+                apiService.logoutUser()
+            } catch (apiError: Exception) {
+                println("API logout call failed, but user data cleared locally. Error: ${apiError.message}")
+            }
+
             Result.success(Unit)
         } catch (e: Exception) {
-            userPreferenceManager.clearAuthToken()
+            // Jika ada error saat membersihkan token, tangani di sini
             Result.failure(e)
         }
     }
 
     fun getCurrentUserName(): Flow<String?> = userPreferenceManager.userName
     fun getCurrentUserEmail(): Flow<String?> = userPreferenceManager.userEmail
-    fun getCurrentUserId(): Flow<Int?> = userPreferenceManager.userId // PASTIKAN FUNGSI INI ADA
+    fun getCurrentUserId(): Flow<Int?> = userPreferenceManager.userId
+    // BARU: Tambahkan getter untuk role jika dibutuhkan di tempat lain
+    fun getCurrentUserRole(): Flow<String?> = userPreferenceManager.userRole
 }

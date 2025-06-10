@@ -6,16 +6,17 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bengkelappclient.R
-import com.example.bengkelappclient.data.model.ServiceResult
 import com.example.bengkelappclient.ui.adapter.OrderStatusAdapter
 import com.example.bengkelappclient.ui.theme.main.EditProfileActivity
 import com.example.bengkelappclient.ui.theme.main.homepage
+import com.example.bengkelappclient.util.Resource // DIUBAH: Pastikan import Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,99 +24,78 @@ class OrderStatusActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
-    private lateinit var orderStatusAdapter: OrderStatusAdapter // Pastikan ini dideklarasikan
+    private lateinit var tvEmptyMessage: TextView // Tambahkan untuk pesan kosong
+    private lateinit var orderStatusAdapter: OrderStatusAdapter
 
-    // Menggunakan lazy initialization untuk ViewModel karena by viewModels() harus dilakukan di dalam Activity
     private val viewModel: OrderStatusViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order_status)
 
-        // Inisialisasi View
+        // Inisialisasi Views
         recyclerView = findViewById(R.id.recyclerViewBookingHistory)
         progressBar = findViewById(R.id.progressBar)
+        tvEmptyMessage = findViewById(R.id.tvEmptyMessage) // Inisialisasi TextView untuk pesan kosong
 
-        // Inisialisasi adapter SEBELUM diatur ke RecyclerView
         orderStatusAdapter = OrderStatusAdapter()
 
-        // Setup RecyclerView setelah adapter diinisialisasi
         setupRecyclerView()
-
-        // Mulai observasi ViewModel
         observeViewModel()
 
         // Panggil pengambilan data setelah setup
         viewModel.fetchBookingHistory()
-        Log.d("OrderStatusActivity", "Memulai pengambilan riwayat pemesanan.")
 
-        // Memanggil fungsi untuk inisialisasi fitur tambahan
-        initAdditionalFeatures()
-
-        // Handle back button
-        val backButton = findViewById<ImageButton>(R.id.back_icon)
-        backButton.setOnClickListener {
-            finish()
-        }
-
-        // Handle bottom navigation buttons
-        findViewById<ImageButton>(R.id.fab_home).setOnClickListener {
-            startActivity(Intent(this, homepage::class.java))
-            finish()
-        }
-
-        findViewById<ImageButton>(R.id.nav_profile).setOnClickListener {
-            startActivity(Intent(this, EditProfileActivity::class.java))
-        }
+        setupToolbar()
     }
 
     private fun setupRecyclerView() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@OrderStatusActivity)
-            adapter = orderStatusAdapter // Pastikan adapter sudah diinisialisasi saat ini
+            adapter = orderStatusAdapter
         }
     }
 
+    // DIUBAH: Fungsi ini disesuaikan untuk menangani Resource<T>
     private fun observeViewModel() {
         viewModel.bookingHistory.observe(this) { result ->
             when (result) {
-                is ServiceResult.Loading -> {
+                is Resource.Loading -> {
                     progressBar.visibility = View.VISIBLE
-                    Log.d("OrderStatusActivity", "Status: Loading data...")
+                    recyclerView.visibility = View.GONE
+                    tvEmptyMessage.visibility = View.GONE
                 }
-                is ServiceResult.Success -> {
+                is Resource.Success -> {
                     progressBar.visibility = View.GONE
-                    if (result.data.isNullOrEmpty()) {
-                        Toast.makeText(this, "Tidak ada riwayat pesanan.", Toast.LENGTH_SHORT).show()
-                        Log.d("OrderStatusActivity", "Daftar pemesanan kosong.")
-                        orderStatusAdapter.submitList(emptyList()) // Pastikan adapter menerima daftar kosong jika tidak ada data
+                    val bookingList = result.data
+                    if (bookingList.isNullOrEmpty()) {
+                        // Tampilkan pesan jika tidak ada data
+                        tvEmptyMessage.text = "Anda belum memiliki riwayat pesanan."
+                        tvEmptyMessage.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
                     } else {
-                        orderStatusAdapter.submitList(result.data)
-                        Log.d("OrderStatusActivity", "Status: Data berhasil dimuat. Jumlah item: ${result.data.size}")
+                        // Tampilkan data ke RecyclerView
+                        tvEmptyMessage.visibility = View.GONE
+                        recyclerView.visibility = View.VISIBLE
+                        orderStatusAdapter.submitList(bookingList)
                     }
                 }
-                is ServiceResult.Error -> {
+                is Resource.Error -> {
                     progressBar.visibility = View.GONE
-                    val errorMessage = result.message ?: "Terjadi kesalahan tidak diketahui."
-                    Toast.makeText(
-                        this,
-                        "Gagal memuat riwayat pesanan: $errorMessage",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Log.e("OrderStatusActivity", "Status: Error memuat data: $errorMessage", result.exception)
-                    orderStatusAdapter.submitList(emptyList()) // Kosongkan daftar jika ada error
+                    recyclerView.visibility = View.GONE
+                    // Tampilkan pesan error
+                    tvEmptyMessage.text = result.message ?: "Terjadi kesalahan"
+                    tvEmptyMessage.visibility = View.VISIBLE
+                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
-    /**
-     * Fungsi ini adalah placeholder untuk fitur tambahan yang mungkin ingin Anda tambahkan di masa mendatang.
-     * Panggil fungsi ini dari onCreate() untuk menginisialisasi fitur-fitur tersebut.
-     */
-    private fun initAdditionalFeatures() {
-        // Anda bisa menambahkan inisialisasi komponen UI tambahan di sini,
-        // atau logika bisnis lain yang tidak terkait langsung dengan pemuatan riwayat pesanan utama.
-        Log.d("OrderStatusActivity", "Fungsi initAdditionalFeatures() dipanggil.")
+    private fun setupToolbar() {
+        findViewById<ImageButton>(R.id.back_icon).setOnClickListener {
+            finish() // Kembali ke halaman sebelumnya
+        }
+        // Navigasi bawah bisa dihapus dari sini jika ini bukan halaman utama
     }
 }

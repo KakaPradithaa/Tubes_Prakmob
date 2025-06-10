@@ -19,20 +19,29 @@ class ScheduleViewModel @Inject constructor(
     private val _schedules = MutableLiveData<Resource<List<Schedule>>>()
     val schedules: LiveData<Resource<List<Schedule>>> = _schedules
 
-    private val _updateResult = MutableLiveData<Resource<Unit>>()
-    val updateResult: LiveData<Resource<Unit>> = _updateResult
+    // Diubah: Menggunakan Resource<Schedule> agar bisa mendapat feedback objek yang ter-update
+    private val _updateResult = MutableLiveData<Resource<Schedule>>()
+    val updateResult: LiveData<Resource<Schedule>> = _updateResult
 
     fun getSchedules() = viewModelScope.launch {
         _schedules.value = Resource.Loading()
         _schedules.value = repository.getSchedules()
     }
 
+    /**
+     * Fungsi ini sekarang mengirim dua argumen yang benar ke repository.
+     */
     fun updateSchedule(schedule: Schedule) = viewModelScope.launch {
         _updateResult.value = Resource.Loading()
-        val result = repository.updateSchedule(schedule)
+
+        // PERBAIKAN DI SINI: Kirim schedule.id dan schedule
+        val result = repository.updateSchedule(schedule.id, schedule)
+
         _updateResult.value = result
+
+        // Muat ulang daftar jika pembaruan berhasil
         if (result is Resource.Success) {
-            getSchedules() // Muat ulang daftar setelah pembaruan berhasil
+            getSchedules()
         }
     }
 }

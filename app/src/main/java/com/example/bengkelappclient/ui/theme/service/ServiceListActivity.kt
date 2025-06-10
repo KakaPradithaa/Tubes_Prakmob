@@ -1,4 +1,4 @@
-package com.example.bengkelappclient.ui.service
+package com.example.bengkelappclient.ui.theme.service
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,10 +11,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bengkelappclient.data.model.Service
-import com.example.bengkelappclient.data.model.ServiceResult
 import com.example.bengkelappclient.databinding.ActivityServiceListBinding
 import com.example.bengkelappclient.ui.adapter.ServiceAdapter
+import com.example.bengkelappclient.ui.service.ServiceViewModel
 import com.example.bengkelappclient.ui.theme.admin.AddServiceActivity
+import com.example.bengkelappclient.util.Resource // Pastikan import Resource
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,6 +27,7 @@ class ServiceListActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListe
     private val viewModel: ServiceViewModel by viewModels()
     private lateinit var serviceAdapter: ServiceAdapter
 
+    // Daftar ini digunakan untuk fungsi pencarian (search)
     private var fullServiceList: List<Service> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,18 +35,14 @@ class ServiceListActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListe
         binding = ActivityServiceListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // --- TAMBAHKAN KODE INI ---
-        // Mengaktifkan tombol kembali
         binding.btnBack.setOnClickListener {
-            finish() // Menutup activity dan kembali ke halaman sebelumnya
+            finish()
         }
-        // -------------------------
 
         setupRecyclerView()
         setupSearch()
-        observeServices()
-        observeDeleteResult()
-        viewModel.fetchAllServices()
+        observeViewModel()
+        // Tidak perlu memanggil fetchAllServices() di sini, karena sudah dipanggil di init ViewModel
     }
 
     private fun setupRecyclerView() {
@@ -82,50 +80,46 @@ class ServiceListActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListe
         }
     }
 
-    private fun observeServices() {
-        viewModel.allServices.observe(this) { result ->
-            when (result) {
-                is ServiceResult.Loading -> {
+    // DIUBAH: Menggabungkan semua observer ke dalam satu fungsi
+    private fun observeViewModel() {
+        // Mengamati daftar layanan
+        viewModel.serviceList.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
-                    binding.emptyState.visibility = View.GONE
+                    binding.recyclerView.visibility = View.GONE
                 }
-                is ServiceResult.Success -> {
+                is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    val services = result.data
+                    val services = resource.data
                     if (services.isNullOrEmpty()) {
-                        binding.emptyState.visibility = View.VISIBLE
                         binding.recyclerView.visibility = View.GONE
+                        // Tampilkan pesan kosong jika perlu
                     } else {
-                        binding.emptyState.visibility = View.GONE
                         binding.recyclerView.visibility = View.VISIBLE
                         fullServiceList = services
                         serviceAdapter.submitList(fullServiceList)
                     }
                 }
-                is ServiceResult.Error -> {
+                is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    binding.emptyState.visibility = View.VISIBLE
-                    Toast.makeText(
-                        this,
-                        "Gagal memuat layanan: ${result.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this, "Gagal memuat: ${resource.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
-    }
 
-    private fun observeDeleteResult() {
-        viewModel.deleteResult.observe(this) { result ->
-            when(result) {
-                is ServiceResult.Loading -> { /* Tampilkan loading jika perlu */ }
-                is ServiceResult.Success -> {
-                    Toast.makeText(this, result.data, Toast.LENGTH_SHORT).show()
-                    // Muat ulang data setelah berhasil menghapus
-                    viewModel.fetchAllServices()
-                }
-                is ServiceResult.Error -> {
-                    Toast.makeText(this, "Error: ${result.message}", Toast.LENGTH_LONG).show()
+        // Mengamati hasil dari operasi hapus/tambah/update
+        viewModel.operationResult.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { resource ->
+                when (resource) {
+                    is Resource.Loading -> { /* Tampilkan loading jika perlu */ }
+                    is Resource.Success -> {
+                        Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
+                        // Daftar akan di-refresh secara otomatis dari ViewModel
+                    }
+                    is Resource.Error -> {
+                        Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }

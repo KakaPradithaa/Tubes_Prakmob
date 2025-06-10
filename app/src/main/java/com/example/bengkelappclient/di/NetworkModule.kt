@@ -1,13 +1,11 @@
 // di/NetworkModule.kt
 package com.example.bengkelappclient.di
 
-import android.content.Context
 import com.example.bengkelappclient.data.datastore.UserPreferenceManager
 import com.example.bengkelappclient.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -23,19 +21,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // --- GANTI BASE URL INI SESUAI DENGAN ALAMAT IP DAN PORT SERVER LARAVEL ANDA ---
-    // Emulator Android Studio standar: "http://10.0.2.2:8000/api/"
-    // Genymotion: "http://10.0.3.2:8000/api/"
-    // Perangkat fisik (terhubung ke WiFi yang sama dengan PC/Laptop Anda):
-    // Ganti 10.0.2.2 dengan IP address lokal PC/Laptop Anda (misal, "http://192.168.1.10:8000/api/")
-    // Pastikan firewall tidak memblokir koneksi.
+    // --- PASTIKAN BASE URL INI SESUAI DENGAN IP LOKAL ANDA ---
     private const val BASE_URL = "http://10.0.2.2:8000/api/"
 
     @Provides
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY) // Log semua body request/response
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         return loggingInterceptor
     }
 
@@ -43,10 +36,9 @@ object NetworkModule {
     @Singleton
     fun provideAuthInterceptor(userPreferenceManager: UserPreferenceManager): Interceptor {
         return Interceptor { chain ->
-            // runBlocking digunakan di sini karena interceptor bukan suspend function,
-            // dan kita perlu token secara sinkron sebelum request dikirim.
-            // Ini umumnya aman karena token biasanya sudah ada atau cepat diambil dari DataStore.
-            val token = runBlocking { userPreferenceManager.getToken().first() }
+            // DIUBAH: Memanggil properti 'authToken' yang benar, bukan fungsi 'getToken()'
+            val token = runBlocking { userPreferenceManager.authToken.first() }
+
             val requestBuilder = chain.request().newBuilder()
             token?.let {
                 requestBuilder.addHeader("Authorization", "Bearer $it")
@@ -60,11 +52,11 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: Interceptor // Tambahkan authInterceptor
+        authInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor) // Untuk logging
-            .addInterceptor(authInterceptor)    // Untuk menambahkan token Bearer
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -77,7 +69,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create()) // Gson untuk konversi JSON
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
