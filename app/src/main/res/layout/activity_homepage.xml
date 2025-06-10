@@ -17,7 +17,6 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- Bagian Header -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -60,7 +59,6 @@
                     tools:textColor="@android:color/black" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Search Box -->
             <EditText
                 android:id="@+id/editTextText3"
                 android:layout_width="match_parent"
@@ -76,50 +74,49 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"/>
 
-            <!-- Banner -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@color/indigoblue"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/indigoblue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:srcCompat="@drawable/montir" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="247dp"
+                    android:layout_height="53dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Pilih layanan dan jadwal
+servis dengan mudah"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0">
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:srcCompat="@drawable/montir" />
-
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="247dp"
-                        android:layout_height="53dp"
-                        android:layout_marginStart="16dp"
-                        android:text="Pilih layanan dan jadwal
-servis dengan mudah"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.504" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintVertical_bias="0.504" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/btnReservasi"
@@ -132,7 +129,6 @@ servis dengan mudah"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
                 android:layout_gravity="center_horizontal" />
-            <!-- Label Layanan -->
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
@@ -145,7 +141,6 @@ servis dengan mudah"
                 android:layout_gravity="center_horizontal"
                 />
 
-            <!-- Grid Kotak Layanan -->
             <GridLayout
                 android:id="@+id/gridLayoutLayanan"
                 android:layout_width="match_parent"
@@ -158,167 +153,10 @@ servis dengan mudah"
                 android:paddingHorizontal="24dp"
                 android:useDefaultMargins="true">
 
-                <!-- ITEM KOTAK -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="130dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:orientation="vertical"
-                    android:layout_margin="6dp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_kotak_layanan">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/engineoil"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ganti Oli"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="130dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:orientation="vertical"
-                    android:layout_margin="6dp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_kotak_layanan">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ban"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ganti Ban"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="130dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:orientation="vertical"
-                    android:layout_margin="6dp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_kotak_layanan">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ban"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Boreup"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="130dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:orientation="vertical"
-                    android:layout_margin="6dp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_kotak_layanan">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ban"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tune Up"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="130dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:orientation="vertical"
-                    android:layout_margin="6dp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_kotak_layanan">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ban"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Infus Injeksi"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="130dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:orientation="vertical"
-                    android:layout_margin="6dp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_kotak_layanan">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ban"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Dyno Test"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center" />
-                </LinearLayout>
             </GridLayout>
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation Custom -->
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
