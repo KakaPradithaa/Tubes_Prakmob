@@ -9,7 +9,7 @@
     import androidx.lifecycle.lifecycleScope
     import com.example.bengkelappclient.databinding.ActivitySplashBinding
     import com.example.bengkelappclient.ui.theme.auth.LoginActivity
-    import com.example.bengkelappclient.ui.service.AddServiceActivity
+    import com.example.bengkelappclient.ui.theme.admin.AddServiceActivity
     import com.example.bengkelappclient.ui.theme.main.MainActivity
     import com.example.bengkelappclient.ui.theme.main.MainViewModel
     import dagger.hilt.android.AndroidEntryPoint

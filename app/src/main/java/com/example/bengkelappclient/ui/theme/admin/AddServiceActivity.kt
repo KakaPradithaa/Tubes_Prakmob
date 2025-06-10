@@ -1,4 +1,4 @@
-package com.example.bengkelappclient.ui.service
+package com.example.bengkelappclient.ui.theme.admin
 
 import android.content.Intent
 import android.net.Uri
@@ -12,6 +12,8 @@ import com.example.bengkelappclient.R
 import com.example.bengkelappclient.data.model.Service
 import com.example.bengkelappclient.data.model.ServiceResult
 import com.example.bengkelappclient.databinding.ActivityAddServiceBinding
+import com.example.bengkelappclient.ui.service.ServiceListActivity
+import com.example.bengkelappclient.ui.service.ServiceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -32,6 +34,13 @@ class AddServiceActivity : AppCompatActivity() {
         uri?.let {
             imageUri = it
             binding.ivPreview.setImageURI(it)
+        }
+    }
+
+    private fun setupActionListeners() {
+        // Menambahkan fungsi untuk tombol kembali
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

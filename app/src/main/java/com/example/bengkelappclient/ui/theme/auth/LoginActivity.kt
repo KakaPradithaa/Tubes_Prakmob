@@ -12,8 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.bengkelappclient.databinding.ActivityLoginBinding
 import com.example.bengkelappclient.ui.auth.AuthViewModel
 import com.example.bengkelappclient.ui.auth.RegisterActivity
-import com.example.bengkelappclient.ui.service.AddServiceActivity
-import com.example.bengkelappclient.ui.theme.main.AdminHomepageActivity
+import com.example.bengkelappclient.ui.theme.admin.AdminHomepageActivity
 import com.example.bengkelappclient.ui.theme.main.homepage
 import com.example.bengkelappclient.util.Resource
 import dagger.hilt.android.AndroidEntryPoint

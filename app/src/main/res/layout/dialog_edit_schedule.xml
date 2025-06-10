@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:text="Ubah Jadwal"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="@color/indigoblue"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Jam Buka (HH:mm)"
+        app:boxStrokeColor="@color/indigoblue"
+        app:hintTextColor="@color/indigoblue"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
+        app:startIconTint="@color/indigoblue">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_open_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:textColor="@color/black" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Jam Tutup (HH:mm)"
+        app:boxStrokeColor="@color/indigoblue"
+        app:hintTextColor="@color/indigoblue"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
+        app:startIconTint="@color/indigoblue">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_close_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:textColor="@color/black" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Maksimum Booking per Slot"
+        app:boxStrokeColor="@color/indigoblue"
+        app:hintTextColor="@color/indigoblue"
+        app:startIconDrawable="@drawable/baseline_person_24"
+        app:startIconTint="@color/indigoblue">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_max_booking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textColor="@color/black" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

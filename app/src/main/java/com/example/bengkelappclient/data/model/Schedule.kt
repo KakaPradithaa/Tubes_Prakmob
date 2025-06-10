@@ -1,4 +1,3 @@
-// data/model/Schedule.kt
 package com.example.bengkelappclient.data.model
 
 import android.os.Parcelable
@@ -13,6 +12,8 @@ data class Schedule(
     val openTime: String,
     @SerializedName("close_time")
     val closeTime: String,
+    @SerializedName("max_booking_per_slot")
+    val slots: Int,
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("updated_at")
