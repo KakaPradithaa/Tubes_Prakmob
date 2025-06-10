@@ -36,16 +36,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btnHome"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Home"
-                android:src="@drawable/baseline_home_24"
-                app:tint="@color/indigoblue" />
+
 
         </RelativeLayout>
 

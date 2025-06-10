@@ -38,6 +38,7 @@
         <activity android:name=".ui.theme.main.BookingActivity" />
         <activity android:name=".ui.theme.main.EditProfileActivity" />
         <activity android:name=".ui.theme.order.OrderStatusActivity"/>
+        <activity android:name=".ui.theme.main.AdminHomepageActivity"/>
 
     </application>
 

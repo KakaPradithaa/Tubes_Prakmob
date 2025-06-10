@@ -13,6 +13,7 @@ import com.example.bengkelappclient.databinding.ActivityLoginBinding
 import com.example.bengkelappclient.ui.auth.AuthViewModel
 import com.example.bengkelappclient.ui.auth.RegisterActivity
 import com.example.bengkelappclient.ui.service.AddServiceActivity
+import com.example.bengkelappclient.ui.theme.main.AdminHomepageActivity
 import com.example.bengkelappclient.ui.theme.main.homepage
 import com.example.bengkelappclient.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
                         }
 
                         if (role == "admin") {
-                            startActivity(Intent(this, AddServiceActivity::class.java))
+                            startActivity(Intent(this, AdminHomepageActivity::class.java))
                         } else {
                             // Tidak perlu lagi mengirim username via Intent, karena sudah di SharedPreferences
                             startActivity(Intent(this, homepage::class.java))
