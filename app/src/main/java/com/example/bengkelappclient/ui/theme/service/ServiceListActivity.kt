@@ -19,7 +19,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
-// Langkah 1: Tambahkan implementasi interface OnItemClickListener
 class ServiceListActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityServiceListBinding
@@ -33,16 +32,23 @@ class ServiceListActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListe
         binding = ActivityServiceListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // --- TAMBAHKAN KODE INI ---
+        // Mengaktifkan tombol kembali
+        binding.btnBack.setOnClickListener {
+            finish() // Menutup activity dan kembali ke halaman sebelumnya
+        }
+        // -------------------------
+
         setupRecyclerView()
         setupSearch()
         observeServices()
-        observeDeleteResult() // Langkah 2: Panggil observer untuk delete
+        observeDeleteResult()
         viewModel.fetchAllServices()
     }
 
     private fun setupRecyclerView() {
         serviceAdapter = ServiceAdapter()
-        serviceAdapter.setOnItemClickListener(this) // Langkah 3: Atur listener untuk adapter
+        serviceAdapter.setOnItemClickListener(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@ServiceListActivity)
             adapter = serviceAdapter
@@ -114,6 +120,8 @@ class ServiceListActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListe
                 is ServiceResult.Loading -> { /* Tampilkan loading jika perlu */ }
                 is ServiceResult.Success -> {
                     Toast.makeText(this, result.data, Toast.LENGTH_SHORT).show()
+                    // Muat ulang data setelah berhasil menghapus
+                    viewModel.fetchAllServices()
                 }
                 is ServiceResult.Error -> {
                     Toast.makeText(this, "Error: ${result.message}", Toast.LENGTH_LONG).show()
@@ -122,10 +130,8 @@ class ServiceListActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListe
         }
     }
 
-    // Fungsi dari interface sekarang akan dianggap sebagai override yang valid
     override fun onUpdateClick(service: Service) {
         val intent = Intent(this@ServiceListActivity, AddServiceActivity::class.java)
-        // Kirim seluruh objek 'service' ke AddServiceActivity
         intent.putExtra(AddServiceActivity.EXTRA_SERVICE, service)
         startActivity(intent)
     }
