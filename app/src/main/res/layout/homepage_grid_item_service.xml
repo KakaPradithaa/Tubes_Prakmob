@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/homepage_grid_item_service.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/service_item_padding"
+    android:background="@drawable/bg_kotak_layanan"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/ivServiceImage"
+        android:layout_width="@dimen/service_icon_size"
+        android:layout_height="@dimen/service_icon_size"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_placeholder"
+        android:scaleType="centerCrop"
+        android:contentDescription="Service Icon" />
+
+    <TextView
+        android:id="@+id/tvServiceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nama Layanan"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/service_text_size"
+        android:layout_marginTop="@dimen/service_text_margin_top"
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textAlignment="center" />
+
+</LinearLayout>
