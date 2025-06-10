@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bengkelappclient.data.model.Service
-import com.example.bengkelappclient.data.model.ServiceResult
 import com.example.bengkelappclient.data.repository.ServiceRepository
+import com.example.bengkelappclient.util.Event
+import com.example.bengkelappclient.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,111 +18,75 @@ class ServiceViewModel @Inject constructor(
     private val serviceRepository: ServiceRepository
 ) : ViewModel() {
 
-    // Untuk hasil operasi Add
-    private val _serviceResult = MutableLiveData<ServiceResult<Service>>()
-    val serviceResult: LiveData<ServiceResult<Service>> = _serviceResult
+    // 1. LiveData untuk menampilkan daftar service utama
+    private val _serviceList = MutableLiveData<Resource<List<Service>>>()
+    val serviceList: LiveData<Resource<List<Service>>> = _serviceList
 
-    // Untuk hasil operasi Delete
-    private val _deleteResult = MutableLiveData<ServiceResult<String>>()
-    val deleteResult: LiveData<ServiceResult<String>> = _deleteResult
+    // 2. LiveData untuk hasil operasi (Create, Update, Delete)
+    // Dibungkus Event agar pesan/toast hanya muncul sekali
+    private val _operationResult = MutableLiveData<Event<Resource<String>>>()
+    val operationResult: LiveData<Event<Resource<String>>> = _operationResult
 
-    // Untuk hasil operasi Update
-    private val _updateResult = MutableLiveData<ServiceResult<String>>()
-    val updateResult: LiveData<ServiceResult<String>> = _updateResult
-
-    // Untuk mengambil semua services
-    private val _allServices = MutableLiveData<ServiceResult<List<Service>>>()
-    val allServices: LiveData<ServiceResult<List<Service>>> = _allServices
-
-    fun addService(
-        name: RequestBody,
-        description: RequestBody,
-        price: RequestBody,
-        image: MultipartBody.Part?
-    ) {
-        viewModelScope.launch {
-            _serviceResult.value = ServiceResult.Loading
-            try {
-                val response = serviceRepository.addService(name, description, price, image)
-                if (response.isSuccessful) {
-                    response.body()?.let { service ->
-                        _serviceResult.value = ServiceResult.Success(service)
-                    } ?: run {
-                        _serviceResult.value = ServiceResult.Error(Exception("Response body is null"))
-                    }
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                    _serviceResult.value = ServiceResult.Error(Exception(errorMessage), errorMessage)
-                }
-            } catch (e: Exception) {
-                _serviceResult.value = ServiceResult.Error(e, e.message)
-            }
-        }
+    init {
+        fetchAllServices()
     }
 
     fun fetchAllServices() {
         viewModelScope.launch {
-            _allServices.value = ServiceResult.Loading
-            try {
-                val response = serviceRepository.getAllServices()
-                if (response.isSuccessful) {
-                    response.body()?.let { services ->
-                        _allServices.value = ServiceResult.Success(services)
-                    } ?: run {
-                        _allServices.value = ServiceResult.Error(Exception("Response body is null"))
-                    }
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                    _allServices.value = ServiceResult.Error(Exception(errorMessage), errorMessage)
+            _serviceList.postValue(Resource.Loading())
+            // Langsung assign hasilnya, karena repository sudah mengembalikan Resource
+            val result = serviceRepository.getAllServices()
+            _serviceList.postValue(result)
+        }
+    }
+
+    fun createService(name: String, description: String, price: String, imageFile: File?) {
+        viewModelScope.launch {
+            _operationResult.postValue(Event(Resource.Loading()))
+            val result = serviceRepository.createService(name, description, price, imageFile)
+            when (result) {
+                is Resource.Success -> {
+                    _operationResult.postValue(Event(Resource.Success("Layanan baru berhasil ditambahkan!")))
+                    fetchAllServices() // Refresh daftar setelah sukses
                 }
-            } catch (e: Exception) {
-                _allServices.value = ServiceResult.Error(e, e.message)
+                is Resource.Error -> {
+                    _operationResult.postValue(Event(Resource.Error(result.message ?: "Gagal menambah layanan")))
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun updateService(serviceId: Int, name: String, description: String, price: String, imageFile: File?) {
+        viewModelScope.launch {
+            _operationResult.postValue(Event(Resource.Loading()))
+            val result = serviceRepository.updateService(serviceId, name, description, price, imageFile)
+            when (result) {
+                is Resource.Success -> {
+                    _operationResult.postValue(Event(Resource.Success("Layanan berhasil diperbarui!")))
+                    fetchAllServices() // Refresh daftar setelah sukses
+                }
+                is Resource.Error -> {
+                    _operationResult.postValue(Event(Resource.Error(result.message ?: "Gagal memperbarui layanan")))
+                }
+                else -> {}
             }
         }
     }
 
     fun deleteService(serviceId: Int) {
         viewModelScope.launch {
-            _deleteResult.value = ServiceResult.Loading
-            try {
-                val response = serviceRepository.deleteService(serviceId)
-                if (response.isSuccessful) {
-                    _deleteResult.value = ServiceResult.Success("Layanan berhasil dihapus")
-                    fetchAllServices() // Refresh daftar setelah berhasil hapus
-                } else {
-                    val errorMsg = response.errorBody()?.string() ?: "Gagal menghapus"
-                    _deleteResult.value = ServiceResult.Error(Exception(errorMsg), errorMsg)
+            _operationResult.postValue(Event(Resource.Loading()))
+            val result = serviceRepository.deleteService(serviceId)
+            when (result) {
+                is Resource.Success -> {
+                    _operationResult.postValue(Event(Resource.Success("Layanan berhasil dihapus!")))
+                    fetchAllServices() // Refresh daftar setelah sukses
                 }
-            } catch (e: Exception) {
-                _deleteResult.value = ServiceResult.Error(e, e.message)
-            }
-        }
-    }
-
-    fun updateService(
-        serviceId: Int,
-        name: RequestBody,
-        description: RequestBody,
-        price: RequestBody,
-        image: MultipartBody.Part?
-    ) {
-        viewModelScope.launch {
-            _updateResult.value = ServiceResult.Loading
-            try {
-                val response = serviceRepository.updateService(serviceId, name, description, price, image)
-
-                // --- LOGIKA YANG DIPERBAIKI ---
-                if (response.isSuccessful) {
-                    // Jika response sukses, kirim pesan String, bukan objek Service.
-                    _updateResult.value = ServiceResult.Success("Layanan berhasil diperbarui")
-                } else {
-                    val errorMsg = response.errorBody()?.string() ?: "Gagal memperbarui"
-                    _updateResult.value = ServiceResult.Error(Exception(errorMsg), errorMsg)
+                is Resource.Error -> {
+                    _operationResult.postValue(Event(Resource.Error(result.message ?: "Gagal menghapus layanan")))
                 }
-                // -----------------------------
-
-            } catch (e: Exception) {
-                _updateResult.value = ServiceResult.Error(e, e.message)
+                else -> {}
             }
         }
     }

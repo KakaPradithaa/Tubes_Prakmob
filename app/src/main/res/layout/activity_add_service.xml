@@ -28,36 +28,15 @@
                 app:tint="@color/indigoblue" />
 
             <TextView
-                android:id="@+id/tvHeaderTitle" android:layout_width="wrap_content"
+                android:id="@+id/tvHeaderTitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="Tambah Service"
                 android:textColor="@color/indigoblue"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
-
-
         </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/llHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tambah Service Baru"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginStart="11dp"/>
-
-        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -86,64 +65,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/indigoblue"
-                    app:hintTextColor="@color/indigoblue">
-
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nama Service"
-                        android:textSize="16sp"
-                        android:textColor="@color/black" />
-
+                        android:hint="Nama Service" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/indigoblue"
-                    app:hintTextColor="@color/indigoblue">
-
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Deskripsi Service"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"
                         android:minLines="3"
-                        android:maxLines="5"
                         android:gravity="top"
                         android:inputType="textMultiLine" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/indigoblue"
-                    app:hintTextColor="@color/indigoblue"
-                    app:prefixText="Rp "
-                    app:prefixTextColor="@color/indigoblue">
-
+                    app:prefixText="Rp ">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Harga Service"
-                        android:inputType="number"
-                        android:textSize="16sp"
-                        android:textColor="@color/black" />
-
+                        android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
-
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -175,14 +132,12 @@
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp">
-
                     <ImageView
                         android:id="@+id/ivPreview"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:scaleType="centerCrop"
                         android:background="#cccccc" />
-
                 </androidx.cardview.widget.CardView>
 
                 <com.google.android.material.button.MaterialButton
@@ -190,16 +145,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Pilih Gambar"
-                    android:textSize="16sp"
-                    android:textColor="@color/indigoblue"
-                    app:backgroundTint="@android:color/transparent"
-                    app:strokeColor="@color/indigoblue"
-                    app:strokeWidth="2dp"
-                    app:cornerRadius="8dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
-
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.button.MaterialButton
@@ -209,12 +156,9 @@
             android:text="Tambah Service"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
             android:paddingVertical="16dp"
-            app:backgroundTint="@color/indigoblue"
             app:cornerRadius="12dp"
             android:layout_marginBottom="16dp" />
 
     </LinearLayout>
-
 </ScrollView>

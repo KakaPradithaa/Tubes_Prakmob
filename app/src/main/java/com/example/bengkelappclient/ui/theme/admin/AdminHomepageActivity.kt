@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bengkelappclient.databinding.ActivityAdminHomepageBinding
 import com.example.bengkelappclient.ui.schedule.ScheduleActivity
-import com.example.bengkelappclient.ui.service.ServiceListActivity
+import com.example.bengkelappclient.ui.theme.service.ServiceListActivity
 
 
 class AdminHomepageActivity : AppCompatActivity() {
