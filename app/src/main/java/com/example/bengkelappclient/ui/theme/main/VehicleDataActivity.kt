@@ -2,14 +2,21 @@ package com.example.bengkelappclient.ui.theme.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bengkelappclient.R
+import com.example.bengkelappclient.ui.theme.order.OrderStatusActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.example.bengkelappclient.util.Resource // Import Resource
+import dagger.hilt.android.AndroidEntryPoint // Import AndroidEntryPoint
 
+@AndroidEntryPoint // Tambahkan anotasi ini
 class VehicleDataActivity : AppCompatActivity() {
 
     private lateinit var backIcon: ImageButton
@@ -22,9 +29,12 @@ class VehicleDataActivity : AppCompatActivity() {
     private lateinit var navProfile: ImageButton
     private lateinit var fabHome: FloatingActionButton
 
+    // Inisialisasi ViewModel
+    private val vehicleViewModel: VehicleViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_vehicles) // Ensure your XML file is named activity_vehicle_data.xml
+        setContentView(R.layout.activity_vehicles)
 
         // Initialize views
         backIcon = findViewById(R.id.back_icon)
@@ -39,7 +49,7 @@ class VehicleDataActivity : AppCompatActivity() {
 
         // Set up click listeners
         backIcon.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed() // Handles the back button press
+            onBackPressedDispatcher.onBackPressed()
         }
 
         btnConfirm.setOnClickListener {
@@ -57,6 +67,9 @@ class VehicleDataActivity : AppCompatActivity() {
         fabHome.setOnClickListener {
             startActivity(Intent(this, homepage::class.java))
         }
+
+        // Amati hasil operasi dari ViewModel
+        observeViewModel()
     }
 
     private fun saveVehicleData() {
@@ -65,27 +78,41 @@ class VehicleDataActivity : AppCompatActivity() {
         val tahun = editTahun.text.toString().trim()
         val platNomor = editPlat.text.toString().trim()
 
-        // Basic validation
         if (brand.isEmpty() || model.isEmpty() || tahun.isEmpty() || platNomor.isEmpty()) {
             Toast.makeText(this, "Semua kolom wajib diisi!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // You would typically save this data to a database (local or remote)
-        // For demonstration, we'll just show a Toast message.
-        val message = """
-            Data Kendaraan Disimpan:
-            Brand: $brand
-            Model: $model
-            Tahun: $tahun
-            Plat Nomor: $platNomor
-        """.trimIndent()
+        // Panggil fungsi createVehicle dari ViewModel
+        vehicleViewModel.createVehicle(brand, model, tahun, platNomor)
+    }
 
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-
-        // After saving, you might want to navigate back or clear the fields
-        // finish() // To go back to the previous activity
-        // clearInputFields() // To clear the form
+    private fun observeViewModel() {
+        vehicleViewModel.operationResult.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        // Tampilkan loading indicator (misalnya ProgressBar)
+                        // Untuk saat ini, kita bisa menonaktifkan tombol
+                        btnConfirm.isEnabled = false
+                        Toast.makeText(this, "Menyimpan data kendaraan...", Toast.LENGTH_SHORT).show()
+                    }
+                    is Resource.Success -> {
+                        btnConfirm.isEnabled = true
+                        Toast.makeText(this, resource.data, Toast.LENGTH_LONG).show()
+                        clearInputFields() // Bersihkan input setelah berhasil
+                        // Anda bisa menambahkan navigasi ke daftar kendaraan atau halaman lain di sini
+                        finish() // Kembali ke halaman sebelumnya setelah sukses
+                    }
+                    is Resource.Error -> {
+                        btnConfirm.isEnabled = true
+                        val errorMessage = resource.message ?: "Terjadi kesalahan."
+                        Toast.makeText(this, "Gagal: $errorMessage", Toast.LENGTH_LONG).show()
+                        Log.e("VehicleDataActivity", "Error: $errorMessage")
+                    }
+                }
+            }
+        }
     }
 
     private fun clearInputFields() {
