@@ -8,6 +8,9 @@ import com.example.bengkelappclient.data.remote.ApiService
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.example.bengkelappclient.data.model.Booking
+import com.example.bengkelappclient.util.Resource // Tambahkan import ini
+
 
 @Singleton
 class BookingRepository @Inject constructor(
@@ -74,6 +77,29 @@ class BookingRepository @Inject constructor(
             }
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun createBooking(booking: Booking): Resource<Booking> { // Menggunakan Resource
+        return try {
+            val userId = userPreferenceManager.userId.first() // Ambil userId dari DataStore
+            if (userId == null) {
+                return Resource.Error("User ID tidak ditemukan. Harap login ulang.")
+            }
+
+            // Buat objek Booking baru dengan userId yang diambil dari DataStore.
+            // Pastikan ID diset 0 atau nilai default karena akan di-generate oleh backend.
+            val bookingWithUserId = booking.copy(userId = userId, id = 0)
+
+            val response = apiService.createBooking(bookingWithUserId) // Panggil API service
+            if (response.isSuccessful && response.body() != null) {
+                Resource.Success(response.body()!!)
+            } else {
+                val errorBody = response.errorBody()?.string()
+                Resource.Error("Gagal membuat booking: ${errorBody ?: response.message()}")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Terjadi kesalahan jaringan.")
         }
     }
 }

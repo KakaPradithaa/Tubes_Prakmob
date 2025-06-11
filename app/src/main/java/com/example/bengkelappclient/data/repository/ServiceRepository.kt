@@ -64,6 +64,17 @@ class ServiceRepository @Inject constructor(
                 val errorMsg = response.errorBody()?.string() ?: response.message()
                 Resource.Error("Gagal menambah layanan: $errorMsg")
             }
+
+            // Di dalam fungsi createService atau updateService
+            if (response.isSuccessful && response.body() != null) {
+                val service = response.body()!!
+                android.util.Log.d("ServiceRepository", "API Success: Service created/updated. Image path from API: ${service.img}") // <-- TAMBAHKAN INI
+                Resource.Success(service)
+            } else {
+                val errorBody = response.errorBody()?.string()
+                android.util.Log.e("ServiceRepository", "API Error: Gagal menambah layanan. Code: ${response.code()}, Message: ${response.message()}, Error Body: $errorBody") // <-- MODIFIKASI INI
+                Resource.Error("Gagal menambah layanan: ${errorBody ?: response.message()}")
+            }
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Terjadi kesalahan pada jaringan")
         }

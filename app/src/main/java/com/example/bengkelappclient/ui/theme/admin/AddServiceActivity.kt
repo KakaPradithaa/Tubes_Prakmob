@@ -3,6 +3,7 @@ package com.example.bengkelappclient.ui.theme.admin
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -137,9 +138,11 @@ class AddServiceActivity : AppCompatActivity() {
                     input.copyTo(output)
                 }
             }
+            Log.d("AddServiceActivity", "Temp file created: ${tempFile.absolutePath}, exists: ${tempFile.exists()}, size: ${tempFile.length()}")
             tempFile
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.e("AddServiceActivity", "Error creating temp file from URI: ${e.message}")
             null
         }
     }

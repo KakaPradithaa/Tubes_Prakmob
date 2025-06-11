@@ -3,6 +3,8 @@ package com.example.bengkelappclient.di
 
 import com.example.bengkelappclient.data.datastore.UserPreferenceManager
 import com.example.bengkelappclient.data.remote.ApiService
+import com.example.bengkelappclient.data.repository.ServiceRepository
+import com.example.bengkelappclient.data.repository.VehicleRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -77,5 +79,17 @@ object NetworkModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVehicleRepository(apiService: ApiService, userPreferenceManager: UserPreferenceManager): VehicleRepository {
+        return VehicleRepository(apiService, userPreferenceManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideServiceRepository(apiService: ApiService): ServiceRepository {
+        return ServiceRepository(apiService)
     }
 }
