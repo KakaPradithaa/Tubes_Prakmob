@@ -36,6 +36,9 @@
         <activity android:name=".ui.theme.admin.AddServiceActivity" />
         <activity android:name=".ui.theme.service.ServiceListActivity" />
         <activity android:name=".ui.theme.main.BookingActivity" />
+        <activity android:name=".ui.theme.main.BookingServiceActivity" />
+        <activity android:name=".ui.theme.main.VehicleDataActivity" />
+        <activity android:name=".ui.theme.main.VehiclesDanReservasiActivity" />
         <activity android:name=".ui.theme.main.EditProfileActivity" />
         <activity android:name=".ui.theme.order.OrderStatusActivity"/>
         <activity android:name=".ui.theme.admin.AdminHomepageActivity"/>

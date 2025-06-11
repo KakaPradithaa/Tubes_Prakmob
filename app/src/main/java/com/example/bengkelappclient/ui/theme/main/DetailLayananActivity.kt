@@ -6,11 +6,11 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.bengkelappclient.R
-import com.example.bengkelappclient.ui.theme.main.BookingActivity
 import com.example.bengkelappclient.ui.theme.main.EditProfileActivity
 import com.example.bengkelappclient.ui.theme.main.homepage
 import com.example.bengkelappclient.ui.theme.order.OrderStatusActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class DetailLayananActivity : AppCompatActivity() {
 
@@ -61,7 +61,7 @@ class DetailLayananActivity : AppCompatActivity() {
 
         // Tombol reservasi
         btnReservasi.setOnClickListener {
-            val intent = Intent(this, BookingActivity::class.java)
+            val intent = Intent(this, BookingServiceActivity::class.java)
             startActivity(intent)
         }
 

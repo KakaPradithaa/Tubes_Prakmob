@@ -55,7 +55,7 @@ class homepage : AppCompatActivity() {
 
     private fun setupButtons() {
         findViewById<Button>(R.id.btnReservasi).setOnClickListener {
-            startActivity(Intent(this, BookingActivity::class.java))
+            startActivity(Intent(this, VehiclesDanReservasiActivity::class.java))
         }
         findViewById<ImageButton>(R.id.nav_profile).setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
