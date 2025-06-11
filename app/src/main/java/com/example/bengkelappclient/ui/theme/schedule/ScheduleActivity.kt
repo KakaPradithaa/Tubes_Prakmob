@@ -28,6 +28,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[ScheduleViewModel::class.java]
 
+        setupActionListeners()
         setupRecyclerView()
         observeSchedules()
         observeUpdateResult()

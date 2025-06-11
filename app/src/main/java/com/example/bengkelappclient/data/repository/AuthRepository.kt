@@ -89,6 +89,7 @@ class AuthRepository @Inject constructor(
                 println("API logout call failed, but user data cleared locally. Error: ${apiError.message}")
             }
 
+
             Result.success(Unit)
         } catch (e: Exception) {
             // Jika ada error saat membersihkan token, tangani di sini
