@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope // Pastikan import ini ada
 import com.example.bengkelappclient.R
 import com.example.bengkelappclient.databinding.ActivityMainBinding
 import com.example.bengkelappclient.ui.theme.auth.LoginActivity
-import com.example.bengkelappclient.ui.theme.customer.CustomerListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -56,13 +55,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.tvDashboardContent.text = "Ini adalah halaman Dashboard Bengkel App."
-
-        binding.btnViewCustomers.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, CustomerListFragment())
-                .addToBackStack(null)
-                .commit()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

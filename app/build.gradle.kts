@@ -29,28 +29,19 @@ android {
                 "proguard-rules.pro"
             )
         }
-
-        buildFeatures {
-            viewBinding = true
-        }
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
     }
+    // Pindahkan buildFeatures ke sini agar berlaku untuk semua build types
+    buildFeatures {
+        viewBinding = true
+        compose = true // Pastikan ini juga di sini untuk Compose
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
     }
 }
 
@@ -70,6 +61,11 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity-ktx:1.8.2") // Untuk by viewModels()
     implementation("androidx.fragment:fragment-ktx:1.6.2") // Untuk by viewModels() di Fragment
+    implementation("com.github.bumptech.glide:glide:4.16.0")//library Glide untuk memuat gambar dari URL
+
+    // --- RecyclerView ---
+    implementation("androidx.recyclerview:recyclerview:1.3.2") // <--- DITAMBAHKAN INI (Gunakan versi terbaru yang stabil)
+
     val lifecycleVersion = "2.7.0" // Cek versi terbaru
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
@@ -100,6 +96,9 @@ dependencies {
 
     // --- DataStore Preferences (Alternatif SharedPreferences yang lebih modern, untuk token) ---
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation ("com.github.bumptech.glide:glide:4.16.0") // Versi terbaru saat ini
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -4,11 +4,16 @@ package com.example.bengkelappclient.data.model
 import com.google.gson.annotations.SerializedName
 
 data class AuthResponse(
-    val status: Boolean,
+    val success: Boolean,
     val message: String,
-    val user: User?, // Bisa nullable jika registrasi/login gagal di tahap awal
+    val data: User
+)
+
+
+data class UserData(
     @SerializedName("access_token")
-    val accessToken: String?,
-    @SerializedName("token_type")
-    val tokenType: String?
+    val token: String,
+    val name: String,
+    val email: String,
+    val role: String
 )

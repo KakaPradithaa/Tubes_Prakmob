@@ -1,8 +1,9 @@
-// ui/auth/LoginActivity.kt
 package com.example.bengkelappclient.ui.theme.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -10,7 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.bengkelappclient.databinding.ActivityLoginBinding
 import com.example.bengkelappclient.ui.auth.AuthViewModel
 import com.example.bengkelappclient.ui.auth.RegisterActivity
-import com.example.bengkelappclient.ui.theme.main.MainActivity
+import com.example.bengkelappclient.ui.theme.admin.AdminHomepageActivity
+import com.example.bengkelappclient.ui.theme.main.homepage
 import com.example.bengkelappclient.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +45,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding.tvGoToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
-            // finish() // Opsional, tergantung alur navigasi yang diinginkan
         }
     }
 
@@ -59,9 +60,31 @@ class LoginActivity : AppCompatActivity() {
                         binding.progressBarLogin.visibility = View.GONE
                         binding.btnLogin.isEnabled = true
                         Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show()
-                        // Navigasi ke MainActivity (Dashboard)
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finishAffinity() // Hapus semua activity sebelumnya dari back stack
+
+                        val user = resource.data?.data
+                        val token = user?.token // <- AMBIL TOKEN DARI RESPONSE
+                        val role = user?.role
+                        val userName = user?.name
+
+                        Log.d("LoginActivity", "User Name: $userName, Role: $role")
+
+                        // --- SIMPAN DATA PENTING KE SHARED PREFERENCES ---
+                        // Gunakan nama file yang sama dengan yang di ApiClient ("MyAppPrefs")
+                        val sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+                        with (sharedPref.edit()) {
+                            putString("token", token) // <- SIMPAN TOKEN DENGAN KEY "token"
+                            putString("USERNAME", userName)
+                            putString("ROLE", role)
+                            apply()
+                        }
+
+                        if (role == "admin") {
+                            startActivity(Intent(this, AdminHomepageActivity::class.java))
+                        } else {
+                            startActivity(Intent(this, homepage::class.java))
+                        }
+
+                        finishAffinity()
                     }
                     is Resource.Error -> {
                         binding.progressBarLogin.visibility = View.GONE

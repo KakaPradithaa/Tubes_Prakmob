@@ -31,10 +31,14 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.etEmailRegister.text.toString().trim()
             val password = binding.etPasswordRegister.text.toString().trim()
             val passwordConfirm = binding.etPasswordConfirm.text.toString().trim()
+            // Get phone and address from their respective EditText fields (you'll add these in the XML)
+            val phone = binding.etPhoneRegister.text.toString().trim() // Assuming etPhoneRegister is the ID
+            val address = binding.etAddressRegister.text.toString().trim() // Assuming etAddressRegister is the ID
 
-            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && passwordConfirm.isNotEmpty()) {
+            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && passwordConfirm.isNotEmpty() && phone.isNotEmpty() && address.isNotEmpty()) { // Add checks for phone and address
                 if (password == passwordConfirm) {
-                    viewModel.register(name, email, password, passwordConfirm)
+                    // Pass phone and address to the ViewModel
+                    viewModel.register(name, email, password, passwordConfirm, phone, address)
                 } else {
                     Toast.makeText(this, "Password dan Konfirmasi Password tidak cocok", Toast.LENGTH_SHORT).show()
                 }
@@ -44,12 +48,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.tvGoToLogin.setOnClickListener {
-            // Navigasi kembali ke LoginActivity
-            // Jika RegisterActivity dibuka dari LoginActivity, cukup finish()
             finish()
-            // Atau jika bisa dibuka dari mana saja:
-            // startActivity(Intent(this, LoginActivity::class.java))
-            // finishAffinity()
         }
     }
 
