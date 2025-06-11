@@ -9,49 +9,56 @@ import com.example.bengkelappclient.data.repository.AuthRepository
 import com.example.bengkelappclient.data.repository.ServiceRepository
 import com.example.bengkelappclient.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val serviceRepository: ServiceRepository,
-    private val authRepository: AuthRepository // DIUBAH: Suntikkan AuthRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     // LiveData untuk daftar layanan
     private val _services = MutableLiveData<Resource<List<Service>>>()
     val services: LiveData<Resource<List<Service>>> = _services
 
-    // BARU: LiveData untuk nama pengguna
+    // LiveData untuk nama pengguna
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> = _userName
 
     init {
-        fetchAllServices()
-        fetchUserName() // BARU: Panggil fungsi untuk mengambil nama user
+        // Panggil refreshData() saat ViewModel pertama kali dibuat
+        refreshData()
     }
 
-    fun fetchAllServices() {
+    // --- FUNGSI BARU UNTUK DIPANGGIL DARI UI ---
+    fun refreshData() {
+        fetchAllServices()
+        fetchUserName()
+    }
+
+    private fun fetchAllServices() {
         viewModelScope.launch {
             _services.value = Resource.Loading()
-            when (val result = serviceRepository.getAllServices()) {
-                is Resource.Success -> {
-                    _services.value = Resource.Success(result.data!!)
-                }
-                is Resource.Error -> {
-                    _services.value = Resource.Error(result.message ?: "Terjadi kesalahan")
-                }
-                else -> {} // Loading state
+            try {
+                val result = serviceRepository.getAllServices()
+                _services.value = result // Langsung teruskan hasil dari repository
+            } catch (e: Exception) {
+                _services.value = Resource.Error("Gagal memuat layanan: ${e.message}")
             }
         }
     }
 
-    // BARU: Fungsi untuk mengambil nama pengguna dari DataStore melalui Repository
     private fun fetchUserName() {
         viewModelScope.launch {
-            authRepository.getCurrentUserName().collect { name ->
-                // Jika nama null (misal, baru login), tampilkan "Pengguna"
-                _userName.value = name ?: "Pengguna"
+            try {
+                // PERBAIKAN: Gunakan .collect untuk mendapatkan nilai dari Flow
+                authRepository.getCurrentUserName().collect { name ->
+                    _userName.value = name ?: "Pengguna"
+                }
+            } catch (e: Exception) {
+                _userName.value = "Pengguna" // Nilai default jika terjadi error
             }
         }
     }

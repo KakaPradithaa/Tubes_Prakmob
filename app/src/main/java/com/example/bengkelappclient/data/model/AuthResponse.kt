@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class AuthResponse(
     val success: Boolean,
     val message: String,
-    val data: User?
+    val data: User
 )
 
 
