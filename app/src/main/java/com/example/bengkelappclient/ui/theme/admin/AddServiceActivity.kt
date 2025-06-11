@@ -62,8 +62,30 @@ class AddServiceActivity : AppCompatActivity() {
             binding.etName.setText(service.name)
             binding.etDescription.setText(service.description)
             binding.etPrice.setText(service.price.toString())
-            val fullImageUrl = "http://10.0.2.2:8000/uploads/services/" + service.img
-            Glide.with(this).load(fullImageUrl).placeholder(R.drawable.ic_placeholder).into(binding.ivPreview)
+
+            val imagePath = service.img
+            if (!imagePath.isNullOrEmpty()) {
+                // Versi 1: Dengan path /storage/
+                val fullImageUrl1 = "http://10.0.2.2:8000/storage/" + imagePath
+
+                // Versi 2: Dengan path /uploads/services/
+                val fullImageUrl2 = "http://10.0.2.2:8000/uploads/services/" + imagePath
+
+                // Glide dengan placeholder solid (versi 1)
+                Glide.with(this)
+                    .load(fullImageUrl1)
+                    .placeholder(R.drawable.placeholder_solid)
+                    .error(R.drawable.placeholder_solid)
+                    .into(binding.ivPreview)
+
+                // Glide alternatif (komentar: bisa diganti jika backend pakai path ini)
+                // Glide.with(this)
+                //     .load(fullImageUrl2)
+                //     .placeholder(R.drawable.ic_placeholder)
+                //     .into(binding.ivPreview)
+            } else {
+                binding.ivPreview.setImageResource(R.drawable.placeholder_solid)
+            }
         }
     }
 
@@ -101,16 +123,12 @@ class AddServiceActivity : AppCompatActivity() {
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        // Tidak melakukan apa-apa karena tidak ada ProgressBar
-                        // Hanya menonaktifkan tombol submit
                         binding.btnSubmit.isEnabled = false
                         Toast.makeText(this, "Memproses...", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Success -> {
                         binding.btnSubmit.isEnabled = true
                         Toast.makeText(this, result.data, Toast.LENGTH_LONG).show()
-
-                        // Kembali ke daftar layanan setelah sukses
                         val intent = Intent(this, ServiceListActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         }

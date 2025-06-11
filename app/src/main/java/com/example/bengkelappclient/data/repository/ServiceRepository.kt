@@ -2,7 +2,7 @@ package com.example.bengkelappclient.data.repository
 
 import com.example.bengkelappclient.data.remote.ApiService
 import com.example.bengkelappclient.data.model.Service
-import com.example.bengkelappclient.util.Resource // Pastikan Anda memiliki class Resource ini
+import com.example.bengkelappclient.util.Resource
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -51,28 +51,19 @@ class ServiceRepository @Inject constructor(
             val priceBody = price.toRequestBody("text/plain".toMediaTypeOrNull())
 
             val imagePart = imageFile?.let {
-                val requestFile = it.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                MultipartBody.Part.createFormData("image", it.name, requestFile)
+                val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("img", it.name, requestFile)
             }
 
-            // Memanggil fungsi yang benar di ApiService
             val response = apiService.createServiceByAdmin(nameBody, descriptionBody, priceBody, imagePart)
 
             if (response.isSuccessful && response.body() != null) {
-                Resource.Success(response.body()!!)
-            } else {
-                val errorMsg = response.errorBody()?.string() ?: response.message()
-                Resource.Error("Gagal menambah layanan: $errorMsg")
-            }
-
-            // Di dalam fungsi createService atau updateService
-            if (response.isSuccessful && response.body() != null) {
                 val service = response.body()!!
-                android.util.Log.d("ServiceRepository", "API Success: Service created/updated. Image path from API: ${service.img}") // <-- TAMBAHKAN INI
+                android.util.Log.d("ServiceRepository", "API Success: Service created/updated. Image path from API: ${service.img}")
                 Resource.Success(service)
             } else {
                 val errorBody = response.errorBody()?.string()
-                android.util.Log.e("ServiceRepository", "API Error: Gagal menambah layanan. Code: ${response.code()}, Message: ${response.message()}, Error Body: $errorBody") // <-- MODIFIKASI INI
+                android.util.Log.e("ServiceRepository", "API Error: Gagal menambah layanan. Code: ${response.code()}, Message: ${response.message()}, Error Body: $errorBody")
                 Resource.Error("Gagal menambah layanan: ${errorBody ?: response.message()}")
             }
         } catch (e: Exception) {
@@ -96,14 +87,12 @@ class ServiceRepository @Inject constructor(
             val priceBody = price.toRequestBody("text/plain".toMediaTypeOrNull())
 
             val imagePart = imageFile?.let {
-                val requestFile = it.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                MultipartBody.Part.createFormData("image", it.name, requestFile)
+                val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("img", it.name, requestFile)
             }
 
-            // Membuat RequestBody untuk _method
             val methodBody = "PUT".toRequestBody("text/plain".toMediaTypeOrNull())
 
-            // Memanggil fungsi yang benar di ApiService
             val response = apiService.updateServiceByAdmin(serviceId, nameBody, descriptionBody, priceBody, imagePart, methodBody)
 
             if (response.isSuccessful && response.body() != null) {
@@ -122,7 +111,6 @@ class ServiceRepository @Inject constructor(
      */
     suspend fun deleteService(serviceId: Int): Resource<Unit> {
         return try {
-            // Memanggil fungsi yang benar di ApiService
             val response = apiService.deleteServiceByAdmin(serviceId)
             if (response.isSuccessful) {
                 Resource.Success(Unit)
