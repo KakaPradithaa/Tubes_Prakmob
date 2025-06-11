@@ -1,3 +1,5 @@
+// Lokasi: data/remote/ApiService.kt
+
 package com.example.bengkelappclient.data.remote
 
 import com.example.bengkelappclient.data.model.*
@@ -22,12 +24,10 @@ interface ApiService {
     suspend fun logoutUser(): Response<SimpleApiResponse>
 
     @GET("user")
-    suspend fun getUserProfile(): Response<User> // Menggunakan versi yang benar (Response<User>)
+    suspend fun getUserProfile(): Response<User>
 
     @PUT("user")
-    suspend fun updateUserProfile(
-        @Body data: Map<String, String> // Menggunakan versi yang benar (PUT /user)
-    ): Response<User>
+    suspend fun updateUserProfile(@Body data: Map<String, String>): Response<User>
 
 
     // =======================================================
@@ -112,7 +112,7 @@ interface ApiService {
     @DELETE("admin/schedules/{id}")
     suspend fun deleteScheduleByAdmin(@Path("id") scheduleId: Int): Response<Unit>
 
-    // --- Manajemen Layanan (Service) oleh Admin ---
+    // --- Manajemen Layanan oleh Admin ---
     @Multipart
     @POST("admin/services")
     suspend fun createServiceByAdmin(
