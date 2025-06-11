@@ -2,6 +2,8 @@ package com.example.bengkelappclient.data.repository
 
 import com.example.bengkelappclient.data.datastore.UserPreferenceManager
 import com.example.bengkelappclient.data.model.BookingDetails
+import com.example.bengkelappclient.data.model.StatusUpdatePayload
+import com.example.bengkelappclient.data.model.UpdateBookingResponse // Pastikan import ini
 import com.example.bengkelappclient.data.remote.ApiService
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -11,7 +13,6 @@ import javax.inject.Singleton
 class BookingRepository @Inject constructor(
     private val apiService: ApiService,
     private val userPreferenceManager: UserPreferenceManager
-    // Perhatikan: ServiceRepository tidak lagi dibutuhkan di sini
 ) {
 
     /**
@@ -21,13 +22,13 @@ class BookingRepository @Inject constructor(
     suspend fun getBookingDetails(): Result<List<BookingDetails>> {
         return try {
             // Ambil role user dari DataStore/Preferences
-            val userRole = userPreferenceManager.userRole.first() ?: "user" // Sesuaikan 'userRole' dengan nama flow Anda
+            val userRole = userPreferenceManager.userRole.first() ?: "user"
 
             // 1. Panggil endpoint yang BENAR berdasarkan role user
             val bookingsResponse = if (userRole.equals("admin", ignoreCase = true)) {
-                apiService.getAllBookingsForAdmin() // Panggil fungsi untuk admin
+                apiService.getAllBookingsForAdmin()
             } else {
-                apiService.getMyBookings() // Panggil fungsi untuk user biasa
+                apiService.getMyBookings()
             }
 
             // 2. Proses response dari satu panggilan API tersebut
@@ -38,14 +39,14 @@ class BookingRepository @Inject constructor(
                 // Vehicle dan Service sudah ada di dalam setiap objek booking.
                 val bookingDetailsList = bookings.mapNotNull { booking ->
                     // Cukup pastikan data vehicle tidak null untuk ditampilkan
-                    if (booking.vehicle != null) {
+                    if (booking.vehicle != null && booking.service != null) { // Pastikan service juga tidak null
                         BookingDetails(
                             booking = booking,
                             vehicle = booking.vehicle,
-                            service = booking.service // service juga sudah ada di dalam booking
+                            service = booking.service
                         )
                     } else {
-                        // Jika karena suatu hal data vehicle tidak ada, lewati item ini
+                        // Jika karena suatu hal data vehicle atau service tidak ada, lewati item ini
                         null
                     }
                 }
@@ -56,6 +57,22 @@ class BookingRepository @Inject constructor(
             }
         } catch (e: Exception) {
             // Tangani exception lain seperti tidak ada koneksi internet
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * [ADMIN] Memperbarui status booking.
+     */
+    suspend fun updateBookingStatus(bookingId: Int, payload: StatusUpdatePayload): Result<UpdateBookingResponse> {
+        return try {
+            val response = apiService.updateBookingStatus(bookingId, payload)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Gagal update status: ${response.code()} - ${response.message()} - ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }

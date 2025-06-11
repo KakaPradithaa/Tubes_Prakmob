@@ -44,7 +44,6 @@
             android:name=".ui.schedule.ScheduleActivity"
             android:exported="false"
             android:label="Kelola Jadwal" />
-
-    </application>
+        <activity android:name=".ui.theme.admin.AdminOrderStatusActivity"/> </application>
 
 </manifest>
