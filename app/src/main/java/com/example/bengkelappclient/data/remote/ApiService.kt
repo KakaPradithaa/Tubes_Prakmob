@@ -22,24 +22,29 @@ interface ApiService {
     suspend fun logoutUser(): Response<SimpleApiResponse>
 
     @GET("user")
-    suspend fun getUserProfile(): Response<AuthResponse>
+    suspend fun getUserProfile(): Response<User> // Menggunakan versi yang benar (Response<User>)
+
+    @PUT("user")
+    suspend fun updateUserProfile(
+        @Body data: Map<String, String> // Menggunakan versi yang benar (PUT /user)
+    ): Response<User>
 
 
     // =======================================================
     // ===            ENDPOINT PUBLIK / BERSAMA            ===
     // =======================================================
 
-    /**
-     * [PUBLIK] Mendapatkan semua layanan yang tersedia.
-     */
     @GET("services")
     suspend fun getAllServices(): Response<List<Service>>
 
-    /**
-     * [PUBLIK] Mendapatkan semua jadwal operasional.
-     */
+    @GET("services/{id}")
+    suspend fun getServiceById(@Path("id") serviceId: Int): Response<Service>
+
     @GET("schedules")
     suspend fun getAllSchedules(): Response<List<Schedule>>
+
+    @GET("schedules/{id}")
+    suspend fun getScheduleById(@Path("id") scheduleId: Int): Response<Schedule>
 
 
     // =======================================================
@@ -53,6 +58,15 @@ interface ApiService {
     @POST("vehicles")
     suspend fun createVehicle(@Body vehicle: Vehicle): Response<Vehicle>
 
+    @GET("vehicles/{id}")
+    suspend fun getVehicleById(@Path("id") vehicleId: Int): Response<Vehicle>
+
+    @PUT("vehicles/{id}")
+    suspend fun updateVehicle(@Path("id") vehicleId: Int, @Body vehicle: Vehicle): Response<Vehicle>
+
+    @DELETE("vehicles/{id}")
+    suspend fun deleteVehicle(@Path("id") vehicleId: Int): Response<Unit>
+
     // --- Manajemen Booking User ---
     @GET("my-bookings")
     suspend fun getMyBookings(): Response<List<Booking>>
@@ -63,10 +77,17 @@ interface ApiService {
     @GET("bookings/{id}")
     suspend fun getBookingById(@Path("id") bookingId: Int): Response<Booking>
 
+    @PUT("bookings/{id}")
+    suspend fun updateBooking(@Path("id") bookingId: Int, @Body booking: Booking): Response<Booking>
+
 
     // =======================================================
     // ===            ENDPOINT KHUSUS ADMIN                ===
     // =======================================================
+
+    // --- Manajemen Kendaraan oleh Admin ---
+    @GET("vehicles")
+    suspend fun getAllVehicles(@Query("user_id") userId: Int? = null): Response<List<Vehicle>>
 
     // --- Manajemen Booking oleh Admin ---
     @GET("admin/bookings")
@@ -101,7 +122,6 @@ interface ApiService {
         @Part image: MultipartBody.Part?
     ): Response<Service>
 
-    // Untuk update service dengan gambar, API Laravel butuh _method=PUT
     @Multipart
     @POST("admin/services/{id}")
     suspend fun updateServiceByAdmin(
@@ -110,7 +130,7 @@ interface ApiService {
         @Part("description") description: RequestBody,
         @Part("price") price: RequestBody,
         @Part image: MultipartBody.Part?,
-        @Part("_method") method: RequestBody // <-- HAPUS NILAI DEFAULT DARI SINI
+        @Part("_method") method: RequestBody
     ): Response<Service>
 
     @DELETE("admin/services/{id}")

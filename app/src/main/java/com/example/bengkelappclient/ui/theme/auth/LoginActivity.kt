@@ -1,7 +1,6 @@
-// ui/auth/LoginActivity.kt
 package com.example.bengkelappclient.ui.theme.auth
 
-import android.content.Context // Import ini
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -46,7 +45,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding.tvGoToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
-            // finish() // Opsional, tergantung alur navigasi yang diinginkan
         }
     }
 
@@ -64,22 +62,25 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show()
 
                         val user = resource.data?.data
+                        val token = user?.token // <- AMBIL TOKEN DARI RESPONSE
                         val role = user?.role
-                        val userName = user?.name // Asumsi 'name' adalah bidang untuk nama pengguna
+                        val userName = user?.name
 
                         Log.d("LoginActivity", "User Name: $userName, Role: $role")
 
-                        // --- SIMPAN NAMA PENGGUNA KE SHARED PREFERENCES ---
-                        val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                        // --- SIMPAN DATA PENTING KE SHARED PREFERENCES ---
+                        // Gunakan nama file yang sama dengan yang di ApiClient ("MyAppPrefs")
+                        val sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
                         with (sharedPref.edit()) {
+                            putString("token", token) // <- SIMPAN TOKEN DENGAN KEY "token"
                             putString("USERNAME", userName)
-                            apply() // Gunakan apply() untuk menyimpan secara asynchronous
+                            putString("ROLE", role)
+                            apply()
                         }
 
                         if (role == "admin") {
                             startActivity(Intent(this, AdminHomepageActivity::class.java))
                         } else {
-                            // Tidak perlu lagi mengirim username via Intent, karena sudah di SharedPreferences
                             startActivity(Intent(this, homepage::class.java))
                         }
 
