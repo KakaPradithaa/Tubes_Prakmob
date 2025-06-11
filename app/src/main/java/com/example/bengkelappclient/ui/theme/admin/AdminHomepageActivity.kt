@@ -32,7 +32,7 @@ class AdminHomepageActivity : AppCompatActivity() {
         }
 
         binding.btnOrder.setOnClickListener {
-            Toast.makeText(this, "Halaman Order belum tersedia", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, AdminOrderStatusActivity::class.java))
         }
 
         binding.btnWorkshopSchedule.setOnClickListener {
